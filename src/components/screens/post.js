@@ -7,9 +7,10 @@
  */
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, Image, TouchableHighlight } from 'react-native';
-
 import Voice from 'react-native-voice';
 
+// 初期のローディング処理
+// ActionBinding
 export default class App extends Component {
   state = {
     recognized: '',
@@ -148,6 +149,7 @@ export default class App extends Component {
   };
 
   render() {
+    console.log(this.props)
     return (
       <View style={styles.container}>
         <Text style={styles.welcome}>Welcome to React Native Voice!</Text>
@@ -209,13 +211,13 @@ const styles = StyleSheet.create({
   action: {
     textAlign: 'center',
     color: '#0000FF',
-    marginVertical: 5,
+    // marginVertical: 5,
     fontWeight: 'bold',
   },
   instructions: {
     textAlign: 'center',
     color: '#333333',
-    marginBottom: 5,
+    // marginBottom: 5,
   },
   stat: {
     textAlign: 'center',
