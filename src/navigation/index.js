@@ -11,27 +11,51 @@ import {
   createReactNavigationReduxMiddleware,
   createNavigationReducer,
 } from 'react-navigation-redux-helpers';
+import { createLogger } from 'redux-logger';
 
-import AppNavigator from './appNavigator';
+import AppNavigator, { getActiveRouteName } from './appNavigator';
 import reducers from '../redux/reducers';
 
 const navReducer = createNavigationReducer(AppNavigator);
 
-const appReducer = combineReducers({
-  nav: navReducer,
-  reducers,
+const isDebuggingInChrome = __DEV__ && !!window.navigator.userAgent;
+
+const logger = createLogger({
+  predicate: () => isDebuggingInChrome,
+  collapsed: true,
+  duration: true,
 });
 
-/* Store */
-// Note: createReactNavigationReduxMiddleware must be run before reduxifyNavigator
-const middleware = createReactNavigationReduxMiddleware(
-  "root",
-  state => state.nav,
-);
+const screenTracking = store => next => (action) => {
+  if (action.type.indexOf('Navigation') === -1 || action.type === 'TAKEMODAL_CLOSE') {
+    return next(action);
+  }
+
+  const currentScreen = getActiveRouteName(store.getState().nav);
+  const result = next(action);
+  const nextScreen = getActiveRouteName(store.getState().nav);
+
+  store.dispatch({
+    type: 'SCREEN_SET',
+    payload: {
+      current: currentScreen,
+      next: nextScreen,
+    },
+  });
+
+  return result;
+};
 
 const store = createStore(
-  appReducer,
-  applyMiddleware(middleware),
+  combineReducers({ ...reducers, nav: navReducer }),
+  applyMiddleware(
+    createReactNavigationReduxMiddleware(
+      'root',
+      state => state.nav,
+    ),
+    logger,
+    screenTracking,
+  ),
 );
 
 const App = reduxifyNavigator(AppNavigator, "root");

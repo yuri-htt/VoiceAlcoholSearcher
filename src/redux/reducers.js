@@ -1,8 +1,5 @@
-
 import app from './modules/app';
 
-const reducers = {
+export default {
   app,
-}
-
-export default reducers;
+};
