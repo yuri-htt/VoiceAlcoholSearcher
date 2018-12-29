@@ -9,6 +9,8 @@ import React, { Component } from 'react';
 import { StyleSheet, Text, View, Image, TouchableHighlight } from 'react-native';
 import Voice from 'react-native-voice';
 
+import images from '../components/images';
+
 // 初期のローディング処理
 // ActionBinding
 export default class Post extends Component {
@@ -31,6 +33,11 @@ export default class Post extends Component {
     Voice.onSpeechResults = this.onSpeechResults;
     Voice.onSpeechPartialResults = this.onSpeechPartialResults;
     Voice.onSpeechVolumeChanged = this.onSpeechVolumeChanged;
+  }
+
+  componentWillMount() {
+    console.log('POST TAB')
+    console.log(this.props)
   }
 
   componentWillUnmount() {
@@ -175,7 +182,7 @@ export default class Post extends Component {
         })}
         <Text style={styles.stat}>{`End: ${this.state.end}`}</Text>
         <TouchableHighlight onPress={this._startRecognizing}>
-          <Image style={styles.button} source={require('./button.png')} />
+          <Image style={styles.button} source={images.button} />
         </TouchableHighlight>
         <TouchableHighlight onPress={this._stopRecognizing}>
           <Text style={styles.action}>Stop Recognizing</Text>

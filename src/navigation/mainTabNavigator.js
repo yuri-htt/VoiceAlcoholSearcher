@@ -2,9 +2,9 @@ import { createStackNavigator } from 'react-navigation';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
 
 /* from app */
-import HomeScreen from '../components/screens/home';
-import PostScreen from '../components/screens/post';
-import BadgesScreen from '../components/screens/badges';
+import HomeScreen from '../screens/home';
+import PostScreen from '../screens/post';
+import BadgesScreen from '../screens/badges';
 
 import {
   HomeTabIcon,
@@ -44,7 +44,7 @@ export default createBottomTabNavigator(
       activeTintColor: '#333',
       inactiveTintColor: '#bbb',
       style: {
-        backgroundColor: '#000',
+        backgroundColor: '#fff',
       },
     },
     tabBarComponent: TabBar,
