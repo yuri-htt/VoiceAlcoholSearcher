@@ -10,20 +10,47 @@ import {
   Text,
   View,
   ScrollView,
+  FlatList,
+  RefreshControl,
 } from 'react-native';
 
 import CategoryCard from '../../components/categoryCard';
+import ListCard from '../../components/listCard';
+import firebase from '../../firebase';
 import styles from './styles';
 
 export default class Home extends Component {
   constructor(props) {
     super(props);
 
-    console.log('HOME TAB')
-    console.log(this.props)
+    this.state = {
+      posts: [],
+      fetching: false,
+      loading: false,
+    };
+  }
+
+  async componentDidMount() {
+    await this.getPosts();
+  }
+
+  getPosts = async (cursor = null) => {
+    this.setState({ fetching: true });
+    const response = await firebase.getPosts(cursor);
+    if (!response.error) {
+      this.setState({
+        posts: response.data,
+      });
+    }
+    this.setState({ fetching: false });
   }
 
   render() {
+    const {
+      posts,
+      fetching,
+      loading,
+    } = this.state;
 
     return (
       <ScrollView style={styles.container}>
@@ -65,6 +92,22 @@ export default class Home extends Component {
 
           <View style={styles.timeLine}>
             <Text style={styles.headLine}>タイムライン</Text>
+            {posts.length > 0 &&
+            <FlatList
+              data={posts}
+              keyExtractor={item => item.key}
+              renderItem={item => <ListCard item={item} />}
+              refreshControl={(
+                <RefreshControl
+                  refreshing={fetching}
+                  onRefresh={this.onRefresh}
+                />
+              )}
+              ListFooterComponent={() => (loading ? <View style={styles.loading}><ActivityIndicator size="small" /></View> : null)}
+              onEndReachedThreshold={0.1}
+              onEndReached={this.onEndReached}
+            />
+            }
           </View>
 
         </View>
