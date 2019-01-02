@@ -6,10 +6,12 @@
  * @flow
  */
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, Image, TouchableHighlight } from 'react-native';
+import { Text, View, Image, TouchableHighlight } from 'react-native';
 import Voice from 'react-native-voice';
 
-import images from '../components/images';
+import images from '../../components/images';
+import firebase from '../../firebase';
+import styles from './styles';
 
 // 初期のローディング処理
 // ActionBinding
@@ -32,7 +34,6 @@ export default class Post extends Component {
     Voice.onSpeechError = this.onSpeechError;
     Voice.onSpeechResults = this.onSpeechResults;
     Voice.onSpeechPartialResults = this.onSpeechPartialResults;
-    Voice.onSpeechVolumeChanged = this.onSpeechVolumeChanged;
   }
 
   componentWillMount() {
@@ -92,31 +93,24 @@ export default class Post extends Component {
     });
   };
 
-  onSpeechVolumeChanged = e => {
-    // eslint-disable-next-line
-    console.log('onSpeechVolumeChanged: ', e);
-    this.setState({
-      pitch: e.value,
-    });
-  };
-
   _startRecognizing = async () => {
-    this.setState({
-      recognized: '',
-      pitch: '',
-      error: '',
-      started: '',
-      results: [],
-      partialResults: [],
-      end: '',
-    });
+    // TODO
+    // this.setState({
+    //   recognized: '',
+    //   error: '',
+    //   started: '',
+    //   results: [],
+    //   partialResults: [],
+    //   end: '',
+    // });
 
-    try {
-      await Voice.start('ja-JP');
-    } catch (e) {
-      //eslint-disable-next-line
-      console.error(e);
-    }
+    // try {
+    //   await Voice.start('ja-JP');
+    // } catch (e) {
+    //   //eslint-disable-next-line
+    //   console.error(e);
+    // }
+    firebase.getIndex();
   };
 
   _stopRecognizing = async () => {
@@ -146,7 +140,6 @@ export default class Post extends Component {
     }
     this.setState({
       recognized: '',
-      pitch: '',
       error: '',
       started: '',
       results: [],
@@ -158,11 +151,8 @@ export default class Post extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <Text style={styles.welcome}>Welcome to React Native Voice!</Text>
-        <Text style={styles.instructions}>Press the button and start speaking.</Text>
         <Text style={styles.stat}>{`Started: ${this.state.started}`}</Text>
         <Text style={styles.stat}>{`Recognized: ${this.state.recognized}`}</Text>
-        <Text style={styles.stat}>{`Pitch: ${this.state.pitch}`}</Text>
         <Text style={styles.stat}>{`Error: ${this.state.error}`}</Text>
         <Text style={styles.stat}>Results</Text>
         {this.state.results.map((result, index) => {
@@ -198,36 +188,3 @@ export default class Post extends Component {
   }
 }
 
-const styles = StyleSheet.create({
-  button: {
-    width: 50,
-    height: 50,
-  },
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  action: {
-    textAlign: 'center',
-    color: '#0000FF',
-    marginVertical: 5,
-    fontWeight: 'bold',
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
-  },
-  stat: {
-    textAlign: 'center',
-    color: '#B0171F',
-    marginBottom: 1,
-  },
-});
