@@ -1,4 +1,15 @@
 import firebase from 'react-native-firebase';
+import algoliasearch from 'algoliasearch/reactnative';
+
+import CONFIG from './config';
+
+const GOO_API_KEY = CONFIG.GOO_API_KEY;
+
+// Algolia クライアントを設定
+const ALGOLIA_ID = CONFIG.ALGOLIA_ID;
+const ALGOLIA_ADMIN_KEY = CONFIG.ALGOLIA_ADMIN_KEY;
+const algolia = algoliasearch(ALGOLIA_ID, ALGOLIA_ADMIN_KEY);
+const index = algolia.initIndex('masterSake');
 
 // collection fn polyfills
 require('core-js/fn/map');
@@ -27,6 +38,22 @@ class Firebase{
           console.log('ERROR:' + error);
         });
       }
+    });
+  }
+
+  getIndex(keyWords) {
+    let queries = [];
+    keyWords.map((keyWord) => {
+      queries.push({
+        indexName: 'masterSake',
+        query: keyWord,
+      })
+    });
+
+    algolia.search(queries, function (err, content) {
+      if (err) throw err;
+      console.log(content.results)
+      return content.results
     });
   }
 
