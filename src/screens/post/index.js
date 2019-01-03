@@ -6,37 +6,47 @@
  * @flow
  */
 import React, { Component } from 'react';
-import { Text, View, Image, TouchableHighlight } from 'react-native';
+import { 
+  Text, 
+  View, 
+  Image, 
+  TouchableHighlight, 
+  Modal, 
+  Dimensions, 
+  ActivityIndicator 
+} from 'react-native';
 import Voice from 'react-native-voice';
+import Ionicon from 'react-native-vector-icons/Ionicons';
 
 import images from '../../components/images';
 import firebase from '../../firebase';
 import CONFIG from '../../config';
 import styles from './styles';
 
+const { width, height } = Dimensions.get('window');
+
 // 初期のローディング処理
 // ActionBinding
 export default class Post extends Component {
   state = {
     recognized: '',
-    pitch: '',
     error: '',
-    end: '',
     started: '',
     results: [],
     partialResults: [],
     convertedResults: [],
+    showModal: false,
+    searching: false,
+    matchLists: [],
   };
 
   constructor(props) {
     super(props);
     Voice.onSpeechStart = this.onSpeechStart;
     Voice.onSpeechRecognized = this.onSpeechRecognized;
-    Voice.onSpeechEnd = this.onSpeechEnd;
     Voice.onSpeechError = this.onSpeechError;
     Voice.onSpeechResults = this.onSpeechResults;
     Voice.onSpeechPartialResults = this.onSpeechPartialResults;
-    Voice.onSpeechVolumeChanged = this.onSpeechVolumeChanged;
   }
 
   componentDidMount() {
@@ -60,12 +70,6 @@ export default class Post extends Component {
     });
   };
 
-  onSpeechEnd = e => {
-    this.setState({
-      end: '√',
-    });
-  };
-
   onSpeechError = e => {
     this.setState({
       error: JSON.stringify(e.error),
@@ -84,33 +88,59 @@ export default class Post extends Component {
     });
   };
 
-  onSpeechVolumeChanged = e => {
-    this.setState({
-      pitch: e.value,
-    });
-  };
-
   _startRecognizing = async () => {
     this.setState({
       recognized: '',
-      pitch: '',
       error: '',
       started: '',
       results: [],
       partialResults: [],
-      end: '',
       convertedResults: [],
+      matchLists: [],
     });
 
     await Voice.start('ja-JP');
   };
 
   async startSerching() {
-    Voice.stop();
-    
+    const { navigation } = this.props;
+    // 画面遷移させるかモーダルで出すか検討
+    // navigation.push('MatchLists');
+    this.setState({
+      showModal: true,
+      searching: true,
+    });
+
+    await Voice.stop();
+    // partialResultsを取得するのに少し時間がかかる
+    await this.witForpartialResults();
     await this.convertAllTexts()
 
-    firebase.getIndex(this.state.convertedResults);
+    const response = await firebase.getIndex(this.state.convertedResults);
+    if (!response.error) {
+      this.setState({
+        searching: false,
+        matchLists: response,
+      });
+      console.log('LOOK')
+      console.log(this.state.searching)
+      console.log(this.state.matchLists.length)
+      console.log(this.state.matchLists)
+    }
+    if (response.error) {
+      this.setState({
+        searching: false,
+      });
+      console.log('通信状況が良い環境で再トライ！')
+    }
+  }
+
+  witForpartialResults() {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        return resolve();
+      }, 500);
+    })
   }
 
   convertAllTexts() {
@@ -148,21 +178,23 @@ export default class Post extends Component {
   }
 
   _stopRecognizing = async () => {
+    this.setState({
+      showModal: true,
+      searching: true,
+    })
     try {
       await Voice.stop();
     } catch (e) {
       //eslint-disable-next-line
       console.error(e);
     }
-  };
 
-  _cancelRecognizing = async () => {
-    try {
-      await Voice.cancel();
-    } catch (e) {
-      //eslint-disable-next-line
-      console.error(e);
-    }
+    await this.convertAllTexts()
+    
+    const test = await firebase.getIndex(this.state.convertedResults);
+    this.setState({
+      searching: false,
+    })
   };
 
   _destroyRecognizer = async () => {
@@ -174,17 +206,60 @@ export default class Post extends Component {
     }
     this.setState({
       recognized: '',
-      pitch: '',
       error: '',
       started: '',
       results: [],
       partialResults: [],
-      end: '',
       convertedResults: [],
+      matchLists: [],
     });
   };
 
   render() {
+    if (this.state.showModal) {
+      return (
+        <Modal
+          animationType="slide"
+          transparent
+          visible
+        >
+          <View style={styles.modalContainer}>
+
+            <View style={[styles.modal, {width: width - 32, height: height - (32 * 7) }]} >
+
+            {this.state.searching &&
+              <ActivityIndicator size="large" color="#0000ff" />
+            }
+
+            {!this.state.searching　&& this.state.matchLists.length > 0 && this.state.matchLists.map((result, index) => {
+              return (
+                <View key={`partial-result-${index}-View`}>
+                {result.hits.map((hit, index) => {
+                return (
+                  <Text key={`partial-result-${index}-Text`} style={styles.stat}>
+                    {hit.name}
+                  </Text>
+                )
+                })}
+                </View>
+              )
+            })}
+
+            {!this.state.searching　&& this.state.matchLists.length === 0 && 
+             <View style={{flex: 1, backgroundColor: 'red'}}>
+              <Text>該当0件だよ</Text>
+              </View>
+            }
+
+            </View>
+
+            <TouchableHighlight style={[styles.dismiss]} onPress={() => {this.setState({showModal: false})}}>
+              <Ionicon name="ios-close-circle-outline" size={44} style={styles.icon} />
+            </TouchableHighlight>
+          </View>
+        </Modal>
+      )
+    }
     return (
       <View style={styles.container}>
       <Text style={styles.guideTxt}>お酒の名前を教えてください。</Text>
@@ -207,22 +282,25 @@ export default class Post extends Component {
             </Text>
           );
         })}
-        <Text style={styles.stat}>{`End: ${this.state.end}`}</Text>
+
         <TouchableHighlight onPress={this._startRecognizing}>
           <Image style={styles.button} source={images.button} />
         </TouchableHighlight>
+
         <TouchableHighlight onPress={this._stopRecognizing}>
           <Text style={styles.action}>Stop Recognizing</Text>
         </TouchableHighlight>
-        <TouchableHighlight onPress={this._cancelRecognizing}>
-          <Text style={styles.action}>Cancel</Text>
-        </TouchableHighlight>
+
         <TouchableHighlight onPress={this._destroyRecognizer}>
           <Text style={styles.action}>Destroy</Text>
         </TouchableHighlight>
 
-        <TouchableHighlight onPress={() => this.startSerching()} style={styles.primaryBtn}>
+        <TouchableHighlight onPress={ () => this.startSerching()} style={styles.primaryBtn}>
           <Text style={styles.primaryBtnTxt}>お酒を検索する</Text>
+        </TouchableHighlight>
+
+        <TouchableHighlight onPress={this._destroyRecognizer} style={styles.seondaryBtn}>
+          <Text style={styles.secondaryBtnTxt}>クリア</Text>
         </TouchableHighlight>
       </View>
     );

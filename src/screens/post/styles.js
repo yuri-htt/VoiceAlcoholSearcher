@@ -14,10 +14,50 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#F5FCFF',
   },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  modal: {
+    backgroundColor: 'white',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 64,
+  },
+  dismiss: {
+    padding:32,
+    paddingTop: 16,
+  },
+  primaryBtn: {
+    marginVertical: 8,
+    width: 280,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: 'black',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  seondaryBtn: {
+    marginVertical: 8,
+    width: 280,
+    height: 36,
+    borderRadius: 18,
+    borderWidth: 1,
+    borderColor: 'black',
+    backgroundColor: 'transparent',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  primaryBtnTxt: {
+    fontSize: 16,
+    color: 'white', 
+    fontWeight: '600',
+  },
+  seondaryBtnTxt: {
+    fontSize: 16,
+    color: 'black', 
+    fontWeight: '600',
   },
   action: {
     textAlign: 'center',

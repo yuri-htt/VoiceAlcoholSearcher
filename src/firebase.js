@@ -41,7 +41,7 @@ class Firebase{
     });
   }
 
-  getIndex(keyWords) {
+  getIndex = async (keyWords) => {
     let queries = [];
     keyWords.map((keyWord) => {
       queries.push({
@@ -50,11 +50,16 @@ class Firebase{
       })
     });
 
-    algolia.search(queries, function (err, content) {
-      if (err) throw err;
-      console.log(content.results)
-      return content.results
-    });
+    return new Promise((resolve, reject ) => {
+      algolia.search(queries, function (err, content) {
+        if (err) {
+          reject(err);
+          return;
+        }
+        
+        resolve(content.results)
+      });
+    })
   }
 
   getPosts = async (cursor = null, num = 5) => {
