@@ -3,14 +3,14 @@ import { createStackNavigator, NavigationActions } from 'react-navigation';
 
 /* screen */
 import MainTabNavigator from './mainTabNavigator';
-import PostScreen from '../components/screens/post';
-import BadgesScreen from '../components/screens/badges';
+// import PostScreen from '../components/screens/post';
+// import BadgesScreen from '../components/screens/badges';
 
 const CardNavigator = createStackNavigator(
   {
     Main: { screen: MainTabNavigator, navigationOptions: { header: null } },
-    Post: { screen: PostScreen },
-    Badges: { screen: BadgesScreen },
+    // Post: { screen: PostScreen, navigationOptions: { header: null } },
+    // Badges: { screen: BadgesScreen },
   },
   {
     navigationOptions: () => ({
@@ -35,12 +35,13 @@ const AppNavigator = createStackNavigator(
     },
   },
   {
-    mode: 'modal',
-    headerMode: 'none',
+    // mode: 'modal',
+    // headerMode: 'none',
     navigationOptions: () => ({
-      headerTitleStyle: {
-        color: '#333',
-      },
+      header: null,
+      // headerTitleStyle: {
+      //   color: '#333',
+      // },
     }),
   },
 );

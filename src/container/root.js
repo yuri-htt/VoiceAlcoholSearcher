@@ -13,10 +13,6 @@ export default class Root extends Component {
     firebase.init();
   }
 
-  componentDidMount() {
-    firebase.init();
-  }
-
   render() {
     return (
       <Navigation />
