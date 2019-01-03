@@ -3,14 +3,10 @@ import { createStackNavigator, NavigationActions } from 'react-navigation';
 
 /* screen */
 import MainTabNavigator from './mainTabNavigator';
-import PostScreen from '../components/screens/post';
-import BadgesScreen from '../components/screens/badges';
 
 const CardNavigator = createStackNavigator(
   {
     Main: { screen: MainTabNavigator, navigationOptions: { header: null } },
-    Post: { screen: PostScreen },
-    Badges: { screen: BadgesScreen },
   },
   {
     navigationOptions: () => ({
