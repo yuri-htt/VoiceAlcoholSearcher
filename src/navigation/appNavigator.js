@@ -31,12 +31,13 @@ const AppNavigator = createStackNavigator(
     },
   },
   {
-    mode: 'modal',
-    headerMode: 'none',
+    // mode: 'modal',
+    // headerMode: 'none',
     navigationOptions: () => ({
-      headerTitleStyle: {
-        color: '#333',
-      },
+      header: null,
+      // headerTitleStyle: {
+      //   color: '#333',
+      // },
     }),
   },
 );
