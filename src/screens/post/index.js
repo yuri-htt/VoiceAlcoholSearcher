@@ -220,17 +220,27 @@ export default class Post extends Component {
   };
 
   renderCandidateListCard(item) {
-    console.log(item)
     if (item === undefined) return;
     return (
-      <View style={[styles.candidateCard, {width: width - 64}]}>
-        <Image
-          style={styles.icon}
-          source={this.getCategoryIcon(item.categoryName)}
-        />
-        <Text style={styles.categoryCardTxt}>{item.name}</Text>
-      </View>
+      <TouchableHighlight onPress={() => this.onPressCard()}>
+        <View style={[styles.candidateCard, {width: width - 64}]}>
+          <Image
+            style={styles.icon}
+            source={this.getCategoryIcon(item.categoryName)}
+          />
+          <Text style={styles.categoryCardTxt}>{item.name}</Text>
+        </View>
+      </TouchableHighlight>
     );
+  }
+
+  onPressCard() {
+    const { navigation } = this.props;
+    this.setState({
+      showModal: false,
+    })
+    // 画面遷移させるかモーダルで出すか検討
+    navigation.push('Add');
   }
 
   getCategoryIcon = (categoryName) => {

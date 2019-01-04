@@ -3,10 +3,12 @@ import { createStackNavigator, NavigationActions } from 'react-navigation';
 
 /* screen */
 import MainTabNavigator from './mainTabNavigator';
+import AddScreen from '../screens/add/index';
 
 const CardNavigator = createStackNavigator(
   {
     Main: { screen: MainTabNavigator, navigationOptions: { header: null } },
+    Add: { screen: AddScreen },
   },
   {
     navigationOptions: () => ({
