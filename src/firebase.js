@@ -23,6 +23,7 @@ class Firebase{
     // firestoreのコレクションへの参照を保持しておく
     this.user = firebase.firestore().collection('user');
     this.post = firebase.firestore().collection('post');
+    // this.post = firebase.firestore().collection('post');
   }
 
   init() {
@@ -88,6 +89,24 @@ class Firebase{
       const lastVisible = querySnapshot.docs.length > 0 ? querySnapshot.docs[querySnapshot.docs.length - 1] : null;
 
       return { data, cursor: lastVisible };
+    } catch ({ message }) {
+      return { error: message };
+    }
+  }
+
+  createPost = async (categoryId = 0, categoryName = '', sakeName = '', starCount = 0, text = '') => {
+    try {
+      await this.post.add({
+        categoryId,
+        categoryName,
+        sakeName,
+        starCount,
+        text,
+        timestamp: Date.now(),
+        user: this.user.doc(`${this.uid}`),
+      });
+
+      return true
     } catch ({ message }) {
       return { error: message };
     }
