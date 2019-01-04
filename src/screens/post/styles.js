@@ -15,19 +15,41 @@ const styles = StyleSheet.create({
     backgroundColor: '#F5FCFF',
   },
   modalContainer: {
-    flex: 1,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    backgroundColor: 'white',
+    paddingTop: 46 + 32,
   },
   modal: {
     backgroundColor: 'white',
+    alignItems: 'center',
+    marginTop: 16,
+  },
+  center: {
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 64,
   },
   dismiss: {
-    padding:32,
+    padding:16,
     paddingTop: 16,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  candidateCard: {
+    flexDirection: 'row',
+    marginBottom: 8,
+    borderRadius: 4,
+    shadowOffset: { width: 4, height: 4 },
+    shadowColor: 'black',
+    shadowOpacity: 0.25,
+    backgroundColor: '#FFF',
+    padding: 16,
+    alignItems: 'center',
+  },
+  icon: {
+    width: 36,
+    height: 36,
+    marginRight: 16,
   },
   primaryBtn: {
     marginVertical: 8,

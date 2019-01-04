@@ -13,7 +13,9 @@ import {
   TouchableHighlight, 
   Modal, 
   Dimensions, 
-  ActivityIndicator 
+  ActivityIndicator,
+  TextInput,
+  ScrollView,
 } from 'react-native';
 import Voice from 'react-native-voice';
 import Ionicon from 'react-native-vector-icons/Ionicons';
@@ -115,17 +117,15 @@ export default class Post extends Component {
     // partialResultsを取得するのに少し時間がかかる
     await this.witForpartialResults();
     await this.convertAllTexts()
+    console.log(this.state.convertedResults)
 
     const response = await firebase.getIndex(this.state.convertedResults);
+    console.log(response)
     if (!response.error) {
       this.setState({
         searching: false,
         matchLists: response,
       });
-      console.log('LOOK')
-      console.log(this.state.searching)
-      console.log(this.state.matchLists.length)
-      console.log(this.state.matchLists)
     }
     if (response.error) {
       this.setState({
@@ -145,7 +145,11 @@ export default class Post extends Component {
 
   convertAllTexts() {
     return new Promise((resolve) => {
-      this.state.partialResults.map((result, index) => {
+      const allCandidates = this.state.results.concat(this.state.partialResults)
+      const uniqueAllCandidates = allCandidates.filter((x, i, self) => {
+        return self.indexOf(x) === i
+      });
+      uniqueAllCandidates.map((result, index) => {
         this.getConvertedText(result)
         .then(data => {
           this.setState({
@@ -215,6 +219,48 @@ export default class Post extends Component {
     });
   };
 
+  renderCandidateListCard(item) {
+    console.log(item)
+    if (item === undefined) return;
+    return (
+      <View style={[styles.candidateCard, {width: width - 64}]}>
+        <Image
+          style={styles.icon}
+          source={this.getCategoryIcon(item.categoryName)}
+        />
+        <Text style={styles.categoryCardTxt}>{item.name}</Text>
+      </View>
+    );
+  }
+
+  getCategoryIcon = (categoryName) => {
+    let icon;
+    switch (categoryName) {
+      case 'カクテル':
+        icon = images.cooktail;
+        break;
+      case 'ワイン':
+        icon = images.wine;
+        break;
+      case 'ビール':
+        icon = images.beer;
+        break;
+      case '日本酒':
+        icon = images.sake;
+        break;
+      case '焼酎':
+        icon = images.syotyu;
+        break;
+      case 'ウイスキー':
+        icon = images.whisky;
+        break;
+      default:
+        icon = images.cooktail;
+        break;
+    }
+    return icon;
+  }
+
   render() {
     if (this.state.showModal) {
       return (
@@ -225,23 +271,26 @@ export default class Post extends Component {
         >
           <View style={styles.modalContainer}>
 
-            <View style={[styles.modal, {width: width - 32, height: height - (32 * 7) }]} >
+          {/* マイクアイコンタップでモーダル削除＆検索候補リセット */}
+          <TextInput
+            style={{width: width - 64, height: 60, paddingHorizontal: 16, borderRadius: 8, borderColor: 'gray', borderWidth: 1}}
+            value={this.state.results[0]}
+            editable={false}
+          />
+
+            <View style={[styles.modal, {width, height: height - 226 }]} >
 
             {this.state.searching &&
+            <View style={[styles.modal, styles.center]} >
               <ActivityIndicator size="large" color="#0000ff" />
+            </View>
             }
 
             {!this.state.searching　&& this.state.matchLists.length > 0 && this.state.matchLists.map((result, index) => {
               return (
-                <View key={`partial-result-${index}-View`}>
-                {result.hits.map((hit, index) => {
-                return (
-                  <Text key={`partial-result-${index}-Text`} style={styles.stat}>
-                    {hit.name}
-                  </Text>
-                )
-                })}
-                </View>
+                <ScrollView key={`partial-result-${index}-View`}>
+                {result.hits.map((hit, index) => this.renderCandidateListCard(hit))}
+                </ScrollView>
               )
             })}
 
@@ -254,7 +303,7 @@ export default class Post extends Component {
             </View>
 
             <TouchableHighlight style={[styles.dismiss]} onPress={() => {this.setState({showModal: false})}}>
-              <Ionicon name="ios-close-circle-outline" size={44} style={styles.icon} />
+              <Ionicon name="ios-close-circle-outline" size={44} />
             </TouchableHighlight>
           </View>
         </Modal>
