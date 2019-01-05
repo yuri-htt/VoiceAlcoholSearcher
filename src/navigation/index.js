@@ -55,7 +55,6 @@ const store = createStore(
     createReactNavigationReduxMiddleware(
       'root',
       state => state.nav,
-      // state => state,
     ),
     logger,
     screenTracking,
@@ -66,13 +65,36 @@ const App = reduxifyNavigator(AppNavigator, "root");
 
 const mapStateToProps = (state) => {
   // stateにはapp.user, navがあるが、Navigationではnav以外うけつけない
+  // console.log(state)
   return {state: state.nav}
 };
 
+const mergeProps = (state, dispatch, ownProps) => {
+  // mergePropsのstateはmapStateToPropsとは異なりアクション
+  // console.log(state)//actions
+  // console.log(ownProps)// undefined
+  // console.log(store.getState().user)//null
+  return ({
+      ...ownProps,
+      screenProps: {
+        ...state,
+        ...dispatch,
+      },
+  })
+}
+
 const AppWithNavigationState = connect(mapStateToProps)(App);
 
+// const Test = connect(
+//   state => ({ ...state }),
+//   dispatch => ({
+//     actions: bindActionCreators({
+//       ...AppActions,
+//     }, dispatch),
+//   }),
+// )(AppWithNavigationState)
 
-export default class Navigation extends React.Component {
+export default class Navigation extends React.Component {  
   async componentDidMount() {
     const uid = await firebase.init();
     store.dispatch({
@@ -84,7 +106,6 @@ export default class Navigation extends React.Component {
   }
 
   render() {
-  
     return(
       <View style={{ flex: 1 }}>
         {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
