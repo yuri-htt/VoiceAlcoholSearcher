@@ -6,16 +6,14 @@ import Navigation from '../navigation';
 export default class Root extends Component {
   constructor() {
     super();
-    
     this.state = {
       isLoadingComplete: false,
     };
-    firebase.init();
   }
 
   render() {
     return (
       <Navigation />
     );
-  }
+  } 
 }

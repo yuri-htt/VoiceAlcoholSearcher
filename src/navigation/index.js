@@ -14,7 +14,9 @@ import {
 import { createLogger } from 'redux-logger';
 
 import AppNavigator, { getActiveRouteName } from './appNavigator';
+import firebase from '../firebase';
 import reducers from '../redux/reducers';
+import user from '../redux/modules/user';
 
 const navReducer = createNavigationReducer(AppNavigator);
 
@@ -47,11 +49,13 @@ const screenTracking = store => next => (action) => {
 };
 
 const store = createStore(
-  combineReducers({ ...reducers, nav: navReducer }),
+  // ここに...reducersがあることでstateにappとuserも追加されている
+  combineReducers({ ...reducers, nav: navReducer, user }),
   applyMiddleware(
     createReactNavigationReduxMiddleware(
       'root',
       state => state.nav,
+      // state => state,
     ),
     logger,
     screenTracking,
@@ -60,19 +64,34 @@ const store = createStore(
 
 const App = reduxifyNavigator(AppNavigator, "root");
 
-const mapStateToProps = (state) => ({
-  state: state.nav,
-});
+const mapStateToProps = (state) => {
+  // stateにはapp.user, navがあるが、Navigationではnav以外うけつけない
+  return {state: state.nav}
+};
 
 const AppWithNavigationState = connect(mapStateToProps)(App);
 
-const Navigation = () => (
-  <View style={{ flex: 1 }}>
-    {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
-    <Provider store={store}>
-      <AppWithNavigationState />
-    </Provider>
-  </View>
-);
 
-export default Navigation;
+export default class Navigation extends React.Component {
+  async componentDidMount() {
+    const uid = await firebase.init();
+    store.dispatch({
+      type: 'SET_USER',
+      payload: {
+        uid,
+      },
+    })
+  }
+
+  render() {
+  
+    return(
+      <View style={{ flex: 1 }}>
+        {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
+        <Provider store={store}>
+          <AppWithNavigationState />
+        </Provider>
+      </View>
+    )
+  }
+}
