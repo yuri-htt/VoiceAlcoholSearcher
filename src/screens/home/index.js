@@ -31,7 +31,8 @@ export default class Home extends Component {
   }
 
   async componentDidMount() {
-    await this.getPosts();
+    const uid = await firebase.init();
+    this.getPosts(uid);
   }
 
   getPosts = async (cursor = null) => {
@@ -41,6 +42,8 @@ export default class Home extends Component {
       this.setState({
         posts: response.data,
       });
+    } else {
+      console.log(response.error)
     }
     this.setState({ fetching: false });
   }
