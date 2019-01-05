@@ -11,6 +11,7 @@ const sake_w = require('../../assets/images/sake_w.png');
 const syotyu_w = require('../../assets/images/syotyu_w.png');
 const whisky_w = require('../../assets/images/whisky_w.png');
 const button = require('../../assets/images/button.png');
+const logo = require('../../assets/images/logo.png');
 
 const images = {
   cooktail,
@@ -26,6 +27,7 @@ const images = {
   syotyu_w,
   whisky_w,
   button,
+  logo,
 };
 
 export default images;

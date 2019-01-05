@@ -61,8 +61,13 @@ export default class Home extends Component {
 
           <View style={styles.header}>
             <View style={styles.degree}>
-              <View style={styles.degreeIcon} />
-              <Text style={styles.degreeTxt}>お酒をたしなむ人</Text>
+              {/* <View style={styles.degreeIcon} /> */}
+              {/* <Text style={styles.degreeTxt}>お酒をたしなむ人</Text> */}
+              <Image
+                style={{width: 60, height: 60}}
+                source={images.logo}
+              />
+              <Text>SAKE BOARD</Text>
             </View>
 
             <View style={styles.summary}>
