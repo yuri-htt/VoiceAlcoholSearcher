@@ -96,6 +96,7 @@ export default class Home extends Component {
           <View style={styles.timeLine}>
             <Text style={styles.headLine}>タイムライン</Text>
             {posts.length > 0 &&
+            <View style={styles.timeLineCards}>
             <FlatList
               data={posts}
               keyExtractor={item => item.key}
@@ -110,6 +111,7 @@ export default class Home extends Component {
               onEndReachedThreshold={0.1}
               onEndReached={this.onEndReached}
             />
+            </View>
             }
           </View>
 

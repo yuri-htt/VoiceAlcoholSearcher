@@ -81,6 +81,9 @@ const styles = StyleSheet.create({
   timeLine: {
     marginTop: 16,
   },
+  timeLineCards: {
+    marginTop: 16,
+  },
 });
 
 export default styles;

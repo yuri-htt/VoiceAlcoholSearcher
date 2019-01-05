@@ -23,7 +23,9 @@ export default class CategoryCard extends Component {
     return (
       <View style={styles.container} onLayout={this.onLayout}>
 
-        <CategoryIcon categoryName={post.categoryName} style={{marginRight: 16}} />
+        <View style={styles.leftColumn}>
+          <CategoryIcon categoryName={post.categoryName} style={{marginRight: 16}} />
+        </View>
 
         <View style={styles.rightColumn}>
           {post.sakeName != '' && (
@@ -36,7 +38,8 @@ export default class CategoryCard extends Component {
               maxStars={5}
               rating={post.starCount}
               starSize={12}
-              buttonStyle={{ marginHorizontal: 2 }}
+              starStyle={{ marginRight: 2 }}
+              containerStyle={{ justifyContent: 'flex-start'}}
               fullStarColor="orange"
               emptyStarColor="orange"
             />

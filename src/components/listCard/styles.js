@@ -5,6 +5,8 @@ const styles = StyleSheet.create({
     flex: 1,
     marginBottom: 12,
     borderRadius: 4,
+    borderWidth: 0.2,
+    borderColor: '#BDBDBD',
     shadowOffset: { width: 4, height: 4 },
     shadowColor: 'black',
     shadowOpacity: 0.25,
@@ -18,12 +20,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 12,
   },
-  avatar: {
-    marginRight: 16,
-  },
-  icon: {
-    paddingHorizontal: 0,
-    paddingVertical: 0,
+  leftColumn: {
+    justifyContent: 'center'
   },
   titleText: {
     color: '#212121',
