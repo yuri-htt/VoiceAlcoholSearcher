@@ -26,21 +26,29 @@ class Firebase{
     // this.post = firebase.firestore().collection('post');
   }
 
-  init() {
+  init = async () => new Promise(resolve => {
+    let userCollection = this.user;
     firebase.auth().onAuthStateChanged(function(user) {
+
       if (user) {
         this.uid = user.uid;
+
       } else {
         firebase.auth().signInAnonymously()
         .then(() => {
           this.uid = (firebase.auth().currentUser || {}).uid;
+          userCollection.doc(`${this.uid}`).set({
+            name: '匿名',
+          });
         })
         .catch(error => {
           console.log('ERROR:' + error);
         });
       }
+
+      resolve(this.uid)
     });
-  }
+  })
 
   getIndex = async (keyWords) => {
     let queries = [];
