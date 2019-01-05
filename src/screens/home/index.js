@@ -9,14 +9,17 @@ import React, { Component } from 'react';
 import {
   Text,
   View,
+  Image,
   ScrollView,
   FlatList,
   RefreshControl,
+  ActivityIndicator,
 } from 'react-native';
 
 import CategoryCard from '../../components/categoryCard';
 import ListCard from '../../components/listCard';
 import firebase from '../../firebase';
+import images from '../../components/images';
 import styles from './styles';
 
 export default class Home extends Component {
@@ -26,13 +29,16 @@ export default class Home extends Component {
     this.state = {
       posts: [],
       fetching: false,
-      loading: false,
+      loading: true,
     };
   }
 
   async componentDidMount() {
     const uid = await firebase.init();
     this.getPosts(uid);
+    this.setState({
+      loading: false,
+    })
   }
 
   getPosts = async (cursor = null) => {
@@ -72,11 +78,11 @@ export default class Home extends Component {
 
             <View style={styles.summary}>
               <View style={styles.total}>
-                <Text style={styles.num}>124</Text>
+                <Text style={styles.num}>{posts.length}</Text>
                 <Text style={styles.label}>杯</Text>
               </View>
               <View style={styles.badges}>
-                <Text style={styles.num}>12</Text>
+                <Text style={styles.num}>0</Text>
                 <Text style={styles.label}>獲得バッジ</Text>
               </View>
             </View>
@@ -100,24 +106,31 @@ export default class Home extends Component {
 
           <View style={styles.timeLine}>
             <Text style={styles.headLine}>タイムライン</Text>
+            {posts.length === 0 &&
+              <View style={styles.empty}>
+                <Text style={styles.emptyTxt}>まだ飲んだお酒はありません</Text>
+                <Text style={styles.emptyTxt}>さっそく今晩飲みに行きませんか？</Text>
+              </View>
+            }
             {posts.length > 0 &&
             <View style={styles.timeLineCards}>
-            <FlatList
-              data={posts}
-              keyExtractor={item => item.key}
-              renderItem={item => <ListCard item={item} />}
-              refreshControl={(
-                <RefreshControl
-                  refreshing={fetching}
-                  onRefresh={this.onRefresh}
-                />
-              )}
-              ListFooterComponent={() => (loading ? <View style={styles.loading}><ActivityIndicator size="small" /></View> : null)}
-              onEndReachedThreshold={0.1}
-              onEndReached={this.onEndReached}
-            />
+              <FlatList
+                data={posts}
+                keyExtractor={item => item.key}
+                renderItem={item => <ListCard item={item} />}
+                refreshControl={(
+                  <RefreshControl
+                    refreshing={fetching}
+                    onRefresh={this.onRefresh}
+                  />
+                )}
+                ListFooterComponent={() => (loading ? <View style={styles.loading}><ActivityIndicator size="small" /></View> : null)}
+                onEndReachedThreshold={0.1}
+                onEndReached={this.onEndReached}
+              />
             </View>
             }
+            
           </View>
 
         </View>

@@ -30,6 +30,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     paddingBottom: 16,
+    marginTop: 32,
   },
   degreeIcon: {
     width: 70,
@@ -43,6 +44,7 @@ const styles = StyleSheet.create({
   },
   summary: {
     flexDirection: 'row',
+    marginTop: 8,
   },
   total: {
     flex: 1,
@@ -84,6 +86,17 @@ const styles = StyleSheet.create({
   timeLineCards: {
     marginTop: 16,
   },
+  //empty
+  empty: {
+    height: 200, 
+    marginTop: 16, 
+    justifyContent: 'center', 
+    alignItems: 'center'
+  },
+  emptyTxt: {
+    fontSize: 16,
+    height: 16 * 1.3, 
+  }
 });
 
 export default styles;
