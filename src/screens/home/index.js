@@ -117,7 +117,7 @@ export default class Home extends Component {
               <FlatList
                 data={posts}
                 keyExtractor={item => item.key}
-                renderItem={item => <ListCard item={item} />}
+                renderItem={item => <ListCard item={item} {...this.props} />}
                 refreshControl={(
                   <RefreshControl
                     refreshing={fetching}
