@@ -10,6 +10,7 @@ const ALGOLIA_ID = CONFIG.ALGOLIA_ID;
 const ALGOLIA_ADMIN_KEY = CONFIG.ALGOLIA_ADMIN_KEY;
 const algolia = algoliasearch(ALGOLIA_ID, ALGOLIA_ADMIN_KEY);
 const index = algolia.initIndex('masterSake');
+let uid;
 
 // collection fn polyfills
 require('core-js/fn/map');
@@ -23,7 +24,6 @@ class Firebase{
     // firestoreのコレクションへの参照を保持しておく
     this.user = firebase.firestore().collection('user');
     this.post = firebase.firestore().collection('post');
-    // this.post = firebase.firestore().collection('post');
   }
 
   init = async () => new Promise(resolve => {
@@ -32,11 +32,12 @@ class Firebase{
 
       if (user) {
         this.uid = user.uid;
-
+        uid = user.uid
       } else {
         firebase.auth().signInAnonymously()
         .then(() => {
           this.uid = (firebase.auth().currentUser || {}).uid;
+          uid = (firebase.auth().currentUser || {}).uid;
           userCollection.doc(`${this.uid}`).set({
             name: '匿名',
           });
@@ -111,7 +112,7 @@ class Firebase{
         starCount,
         text,
         timestamp: Date.now(),
-        user: this.user.doc(`${this.uid}`),
+        user: this.user.doc(`${uid}`),
       });
 
       return true
