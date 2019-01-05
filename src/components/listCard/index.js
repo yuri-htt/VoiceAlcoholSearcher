@@ -7,6 +7,7 @@ import {
 import StarRating from 'react-native-star-rating';
 import moment from 'moment';
 
+import CategoryIcon from '../categoryIcon';
 import styles from './styles';
 
 export default class CategoryCard extends Component {
@@ -22,13 +23,11 @@ export default class CategoryCard extends Component {
     return (
       <View style={styles.container} onLayout={this.onLayout}>
 
-        {/* <TouchableOpacity style={styles.avatar} onPress={() => onUserPress(this.props)}>
-          <Avatar uri={user.img} />
-        </TouchableOpacity> */}
+        <CategoryIcon categoryName={post.categoryName} style={{marginRight: 16}} />
 
         <View style={styles.rightColumn}>
-          {post.titleText != '' && (
-            <Text style={styles.titleText}>{post.titleText}</Text>
+          {post.sakeName != '' && (
+            <Text style={styles.titleText}>{post.sakeName}</Text>
           )}
           <Text style={styles.text}>{postedDate}</Text>
           <View style={styles.stars}>
@@ -42,9 +41,6 @@ export default class CategoryCard extends Component {
               emptyStarColor="orange"
             />
           </View>
-          {/*
-          <Text style={styles.time}>{this.getRelativeTime(timestamp)}</Text>
-          */}
         </View>
       </View>
     );
