@@ -30,8 +30,7 @@ export default class Detail extends Component {
             emptyStarColor="orange"
           />
         </View>
-        {/* <Text style={styles.contentTxt}>{post.text}</Text> */}
-        <Text style={styles.contentTxt}>南カリフォルニア州の畑で育った80年代物のワイン。太陽の香りがほのかにかほる。</Text>
+        <Text style={styles.contentTxt}>{post.text}</Text>
         <Text style={styles.dateTxt}>{postedDate}</Text>
       </View>
     );

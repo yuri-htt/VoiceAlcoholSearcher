@@ -4,17 +4,16 @@ import {
   View, 
   TextInput, 
   Dimensions, 
-  Image,
   TouchableOpacity,
   Keyboard
 } from 'react-native';
 import StarRating from 'react-native-star-rating';
 
+import CategoryIcon from '../../components/categoryIcon';
 import firebase from '../../firebase';
-import images from '../../components/images';
 import styles from './styles';
 
-const { width, height } = Dimensions.get('window');
+const { width } = Dimensions.get('window');
 
 export default class Add extends Component {
   constructor(props) {
@@ -43,11 +42,8 @@ export default class Add extends Component {
       <View style={styles.container}>
         <View style={[{width}, styles.contents]}>
           <View style={styles.sake}>
-            <Image
-                style={styles.icon}
-                source={this.getCategoryIcon(categoryName)}
-              />
-            <Text>{sakeName}</Text>
+              <CategoryIcon categoryName={categoryName} size={50} style={{marginRight: 16}}/>
+            <Text style={styles.name}>{sakeName}</Text>
           </View>
         
           <View style={[styles.row, styles.starContainer]}>
@@ -87,34 +83,6 @@ export default class Add extends Component {
         </View>
       </View>
     );
-  }
-
-  getCategoryIcon = (categoryName) => {
-    let icon;
-    switch (categoryName) {
-      case 'カクテル':
-        icon = images.cooktail;
-        break;
-      case 'ワイン':
-        icon = images.wine;
-        break;
-      case 'ビール':
-        icon = images.beer;
-        break;
-      case '日本酒':
-        icon = images.sake;
-        break;
-      case '焼酎':
-        icon = images.syotyu;
-        break;
-      case 'ウイスキー':
-        icon = images.whisky;
-        break;
-      default:
-        icon = images.cooktail;
-        break;
-    }
-    return icon;
   }
 
   onPressStarRating(rating) {
@@ -161,6 +129,7 @@ export default class Add extends Component {
   }
 
   onPressCancel() {
-    // 
+    const { navigation } = this.props;
+    navigation.pop();
   }
 }

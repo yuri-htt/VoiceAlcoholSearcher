@@ -18,10 +18,8 @@ const styles = StyleSheet.create({
     marginTop: 32,
     marginBottom: 32,
   },
-  icon: {
-    width: 36,
-    height: 36,
-    marginRight: 16,
+  name: {
+    fontSize: 20,
   },
   row: {
     flexDirection: 'row',
@@ -38,13 +36,12 @@ const styles = StyleSheet.create({
   textInputContainer: {
     height: 200,
     marginBottom: 32,
-    // backgroundColor: 'blue'
   },
   textInput: {
     flex: 1,
     fontSize: 16,
-    borderColor: 'gray',
-    borderWidth: 0.25,
+    borderColor: '#BDBDBD',
+    borderWidth: 1,
     borderRadius: 4,
     padding: 16,
     paddingTop: 16,
