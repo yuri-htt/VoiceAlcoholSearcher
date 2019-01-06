@@ -1,10 +1,3 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow
- */
 import React, { Component } from 'react';
 import { 
   Text, 
@@ -16,10 +9,13 @@ import {
   ActivityIndicator,
   TextInput,
   ScrollView,
+  Animated,
+  ImageBackground,
 } from 'react-native';
 import Voice from 'react-native-voice';
 import Ionicon from 'react-native-vector-icons/Ionicons';
 
+import CategoryIcon from '../../components/categoryIcon';
 import images from '../../components/images';
 import firebase from '../../firebase';
 import CONFIG from '../../config';
@@ -27,19 +23,20 @@ import styles from './styles';
 
 const { width, height } = Dimensions.get('window');
 
-// 初期のローディング処理
-// ActionBinding
 export default class Post extends Component {
   state = {
-    recognized: '',
+    recognized: false,
     error: '',
-    started: '',
+    started: false,
     results: [],
     partialResults: [],
     convertedResults: [],
     showModal: false,
     searching: false,
+    recognizing: false,
     matchLists: [],
+    dotsCircleDegree: new Animated.Value(0),
+    animation: true,
   };
 
   constructor(props) {
@@ -54,6 +51,30 @@ export default class Post extends Component {
   componentDidMount() {
     // 音声認識開始
     this._startRecognizing()
+    this.setState({recognizing: true})
+    this.state.dotsCircleDegree.setValue(0);
+    this.startRotateAnimation();
+  }
+
+  startRotateAnimation(n) {
+    console.log(this.props.navigation.state.routeName) // PostTab
+    let i = 1;
+    let toValue = n || i;
+    Animated.sequence([
+      Animated.timing(
+        this.state.dotsCircleDegree, {
+          toValue: toValue, 
+          duration: 1000, 
+          delay: 1000
+        }
+      ),
+    ])
+    .start((event) => {
+      toValue++;
+      if (event.finished && this.state.animation) {
+        this.startRotateAnimation(toValue);
+      }
+    })
   }
 
   componentWillUnmount() {
@@ -62,13 +83,13 @@ export default class Post extends Component {
 
   onSpeechStart = e => {
     this.setState({
-      started: '√',
+      started: '認識しています',
     });
   };
 
   onSpeechRecognized = e => {
     this.setState({
-      recognized: '√',
+      recognized: true,
     });
   };
 
@@ -92,7 +113,6 @@ export default class Post extends Component {
 
   _startRecognizing = async () => {
     this.setState({
-      recognized: '',
       error: '',
       started: '',
       results: [],
@@ -105,12 +125,12 @@ export default class Post extends Component {
   };
 
   async startSerching() {
-    const { navigation } = this.props;
-    // 画面遷移させるかモーダルで出すか検討
-    // navigation.push('MatchLists');
     this.setState({
+      started: '',
       showModal: true,
       searching: true,
+      recognizing: false,
+      animation: false,
     });
 
     await Voice.stop();
@@ -205,18 +225,19 @@ export default class Post extends Component {
     try {
       await Voice.destroy();
     } catch (e) {
-      //eslint-disable-next-line
       console.error(e);
     }
     this.setState({
-      recognized: '',
+      recognized: false,
       error: '',
-      started: '',
       results: [],
       partialResults: [],
       convertedResults: [],
       matchLists: [],
+      animation: true,
     });
+
+    Voice.start('ja-JP');
   };
 
   renderCandidateListCard(item) {
@@ -224,10 +245,7 @@ export default class Post extends Component {
     return (
       <TouchableHighlight onPress={() => this.onPressCard(item)}>
         <View style={[styles.candidateCard, {width: width - 64}]}>
-          <Image
-            style={styles.icon}
-            source={this.getCategoryIcon(item.categoryName)}
-          />
+          <CategoryIcon categoryName={item.categoryName} style={{ marginRight: 16 }}/>
           <Text style={styles.categoryCardTxt}>{item.name}</Text>
         </View>
       </TouchableHighlight>
@@ -243,35 +261,12 @@ export default class Post extends Component {
     navigation.push('Add', { item });
   }
 
-  getCategoryIcon = (categoryName) => {
-    let icon;
-    switch (categoryName) {
-      case 'カクテル':
-        icon = images.cooktail;
-        break;
-      case 'ワイン':
-        icon = images.wine;
-        break;
-      case 'ビール':
-        icon = images.beer;
-        break;
-      case '日本酒':
-        icon = images.sake;
-        break;
-      case '焼酎':
-        icon = images.syotyu;
-        break;
-      case 'ウイスキー':
-        icon = images.whisky;
-        break;
-      default:
-        icon = images.cooktail;
-        break;
-    }
-    return icon;
-  }
-
   render() {
+    let deg = this.state.dotsCircleDegree.interpolate({
+      inputRange: [0, 1],
+      outputRange: ['0deg', '360deg']
+    });
+
     if (this.state.showModal) {
       return (
         <Modal
@@ -281,14 +276,13 @@ export default class Post extends Component {
         >
           <View style={styles.modalContainer}>
 
-          {/* マイクアイコンタップでモーダル削除＆検索候補リセット */}
           <TextInput
-            style={{width: width - 64, height: 60, paddingHorizontal: 16, borderRadius: 8, borderColor: 'gray', borderWidth: 1}}
+            style={{width: width - 64, height: 60, paddingHorizontal: 16, borderRadius: 8, borderColor: '#BDBDBD', borderWidth: 1}}
             value={this.state.results[0]}
             editable={false}
           />
 
-            <View style={[styles.modal, {width, height: height - 226 }]} >
+            <View style={[styles.modal, {width, height: height - 248 }]} >
 
             {this.state.searching &&
             <View style={[styles.modal, styles.center]} >
@@ -299,7 +293,7 @@ export default class Post extends Component {
             {!this.state.searching　&& this.state.matchLists.length > 0 && this.state.matchLists.map((result, index) => {
               return (
                 <ScrollView key={`partial-result-${index}-View`}>
-                {result.hits.map((hit, index) => this.renderCandidateListCard(hit))}
+                {result.hits.map(hit => this.renderCandidateListCard(hit))}
                 </ScrollView>
               )
             })}
@@ -313,7 +307,7 @@ export default class Post extends Component {
             </View>
 
             <TouchableHighlight style={[styles.dismiss]} onPress={() => {this.setState({showModal: false})}}>
-              <Ionicon name="ios-close-circle-outline" size={44} />
+              <Ionicon name="ios-close-circle-outline" size={50} />
             </TouchableHighlight>
           </View>
         </Modal>
@@ -321,46 +315,54 @@ export default class Post extends Component {
     }
     return (
       <View style={styles.container}>
-      <Text style={styles.guideTxt}>お酒の名前を教えてください。</Text>
-        <Text style={styles.stat}>{`Started: ${this.state.started}`}</Text>
-        <Text style={styles.stat}>{`Recognized: ${this.state.recognized}`}</Text>
-        <Text style={styles.stat}>{`Error: ${this.state.error}`}</Text>
-        <Text style={styles.stat}>Results</Text>
-        {this.state.results.map((result, index) => {
-          return (
+        <Text style={styles.guideTxt}>お酒の名前を教えてください。</Text>
+        <View style={styles.voiceContainer}>
+          <ImageBackground style={styles.voice} source={images.voiceShape}>
+          {this.state.results.map((result, index) => {
+            return (
             <Text key={`result-${index}`} style={styles.stat}>
               {result}
             </Text>
-          );
-        })}
-        <Text style={styles.stat}>Partial Results</Text>
-        {this.state.partialResults.map((result, index) => {
+            );
+          })}
+          </ImageBackground>
+        </View>
+        
+        {/* {this.state.partialResults.map((result, index) => {
           return (
             <Text key={`partial-result-${index}`} style={styles.stat}>
               {result}
             </Text>
           );
-        })}
+        })} */}
+  
+        <View style={{ marginBottom: 64 }}>
+          <View style={styles.mikeContainer}>
+            <Animated.View style={[styles.animateContainer, {transform: [{rotate: deg}]}]} >
+              <Image style={styles.circle} source={images.dotsCircle} />
+            </Animated.View>
+            <TouchableHighlight onPress={this._startRecognizing}>
+              <Image style={styles.button} source={images.mike} />
+            </TouchableHighlight>
+          </View>
+        </View>
 
-        <TouchableHighlight onPress={this._startRecognizing}>
-          <Image style={styles.button} source={images.button} />
-        </TouchableHighlight>
-
-        <TouchableHighlight onPress={this._stopRecognizing}>
-          <Text style={styles.action}>Stop Recognizing</Text>
-        </TouchableHighlight>
-
-        <TouchableHighlight onPress={this._destroyRecognizer}>
-          <Text style={styles.action}>Destroy</Text>
-        </TouchableHighlight>
-
-        <TouchableHighlight onPress={ () => this.startSerching()} style={styles.primaryBtn}>
-          <Text style={styles.primaryBtnTxt}>お酒を検索する</Text>
-        </TouchableHighlight>
-
+        <View style={{width: 280, height: 52}}>
+        {this.state.recognized &&
+          <TouchableHighlight onPress={ () => this.startSerching()} style={styles.primaryBtn}>
+            <Text style={styles.primaryBtnTxt}>お酒を検索する</Text>
+          </TouchableHighlight>
+        }
+        </View>
+        
+        <View style={{width: 280, height: 52}}>
+        {this.state.recognized &&
         <TouchableHighlight onPress={this._destroyRecognizer} style={styles.seondaryBtn}>
           <Text style={styles.secondaryBtnTxt}>クリア</Text>
         </TouchableHighlight>
+        }
+        </View>
+        
       </View>
     );
   }

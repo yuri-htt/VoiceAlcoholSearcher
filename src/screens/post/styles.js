@@ -4,15 +4,41 @@ import styleConstants from '../../styleConstants';
 
 
 const styles = StyleSheet.create({
+  voiceContainer: {
+    // backgroundColor: 'green',
+    marginTop: 32,
+  },
+  voice: {
+    width: 300 * 0.6,
+    height: 180* 0.6,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  animateContainer: {
+    width: 120, 
+    height: 120,
+    position: 'absolute',
+  },
+  mikeContainer: {
+    // position: 'absolute',
+    marginTop: 64,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   button: {
     width: 50,
     height: 50,
+  },
+  circle: {
+    position: 'absolute',
+    width: 120, 
+    height: 120,
   },
   container: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#F5FCFF',
+    backgroundColor: '#FFF',
   },
   modalContainer: {
     justifyContent: 'center',
@@ -45,6 +71,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFF',
     padding: 16,
     alignItems: 'center',
+    borderWidth: 0.2,
+    borderColor: '#BDBDBD',
   },
   icon: {
     width: 36,
@@ -94,8 +122,8 @@ const styles = StyleSheet.create({
   },
   stat: {
     textAlign: 'center',
-    color: '#B0171F',
-    marginBottom: 1,
+    color: '#212121',
+    marginBottom: 16,
   },
 });
 

@@ -12,6 +12,9 @@ const syotyu_w = require('../../assets/images/syotyu_w.png');
 const whisky_w = require('../../assets/images/whisky_w.png');
 const button = require('../../assets/images/button.png');
 const logo = require('../../assets/images/logo.png');
+const mike = require('../../assets/images/mike.png');
+const dotsCircle = require('../../assets/images/dotsCircle.png');
+const voiceShape = require('../../assets/images/voiceShape.png');
 
 const images = {
   cooktail,
@@ -28,6 +31,9 @@ const images = {
   whisky_w,
   button,
   logo,
+  mike,
+  dotsCircle,
+  voiceShape,
 };
 
 export default images;
