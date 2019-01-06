@@ -116,6 +116,23 @@ class Firebase{
       return { error: message };
     }
   }
+
+  updatePost = async (key = '', categoryId = 0, categoryName = '', sakeName = '', starCount = 0, text = '') => {
+    try {
+      await this.post.doc(`${key}`).update({
+        categoryId,
+        categoryName,
+        sakeName,
+        starCount,
+        text,
+        timestamp: Date.now(),
+      });
+
+      return true
+    } catch ({ message }) {
+      return { error: message };
+    }
+  }
 }
 
 // KAORU: 呼び出す側でnewした方が良い?

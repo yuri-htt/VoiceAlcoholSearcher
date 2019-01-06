@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { Text, View, Image, TouchableHighlight } from 'react-native';
 import StarRating from 'react-native-star-rating';
 import moment from 'moment';
+import ActionButton from 'react-native-action-button';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import CategoryIcon from '../../components/categoryIcon';
 import styles from './styles';
@@ -32,7 +34,20 @@ export default class Detail extends Component {
         </View>
         <Text style={styles.contentTxt}>{post.text}</Text>
         <Text style={styles.dateTxt}>{postedDate}</Text>
+
+        <ActionButton 
+          buttonColor="#212121"
+          renderIcon={() => <Icon name="edit" size={24} color="rgba(255,255,255,1)" />}
+          onPress={() => this.onOPressEdit()}
+        />
+
       </View>
     );
+  }
+
+  onOPressEdit() {
+    const { navigation } = this.props;
+    const post = navigation.getParam('post', null);
+    navigation.push('Edit', { post });
   }
 }

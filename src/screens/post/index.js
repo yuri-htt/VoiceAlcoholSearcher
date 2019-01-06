@@ -33,7 +33,6 @@ export default class Post extends Component {
     convertedResults: [],
     showModal: false,
     searching: false,
-    recognizing: false,
     matchLists: [],
     dotsCircleDegree: new Animated.Value(0),
     animation: true,
@@ -49,15 +48,12 @@ export default class Post extends Component {
   }
 
   componentDidMount() {
-    // 音声認識開始
-    this._startRecognizing()
-    this.setState({recognizing: true})
     this.state.dotsCircleDegree.setValue(0);
     this.startRotateAnimation();
+    this._startRecognizing()
   }
 
   startRotateAnimation(n) {
-    console.log(this.props.navigation.state.routeName) // PostTab
     let i = 1;
     let toValue = n || i;
     Animated.sequence([
@@ -129,7 +125,6 @@ export default class Post extends Component {
       started: '',
       showModal: true,
       searching: true,
-      recognizing: false,
       animation: false,
     });
 
@@ -201,26 +196,6 @@ export default class Post extends Component {
     .then(response => response.json())
   }
 
-  _stopRecognizing = async () => {
-    this.setState({
-      showModal: true,
-      searching: true,
-    })
-    try {
-      await Voice.stop();
-    } catch (e) {
-      //eslint-disable-next-line
-      console.error(e);
-    }
-
-    await this.convertAllTexts()
-    
-    const test = await firebase.getIndex(this.state.convertedResults);
-    this.setState({
-      searching: false,
-    })
-  };
-
   _destroyRecognizer = async () => {
     try {
       await Voice.destroy();
@@ -234,8 +209,14 @@ export default class Post extends Component {
       partialResults: [],
       convertedResults: [],
       matchLists: [],
-      animation: true,
     });
+
+    if (!this.state.animation) {
+      this.startRotateAnimation();
+      this.setState({
+        animation: true,
+      });
+    }
 
     Voice.start('ja-JP');
   };
@@ -257,7 +238,6 @@ export default class Post extends Component {
     this.setState({
       showModal: false,
     })
-    // 画面遷移させるかモーダルで出すか検討
     navigation.push('Add', { item });
   }
 
@@ -327,14 +307,6 @@ export default class Post extends Component {
           })}
           </ImageBackground>
         </View>
-        
-        {/* {this.state.partialResults.map((result, index) => {
-          return (
-            <Text key={`partial-result-${index}`} style={styles.stat}>
-              {result}
-            </Text>
-          );
-        })} */}
   
         <View style={{ marginBottom: 64 }}>
           <View style={styles.mikeContainer}>

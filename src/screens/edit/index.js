@@ -15,19 +15,19 @@ import styles from './styles';
 
 const { width } = Dimensions.get('window');
 
-export default class Add extends Component {
+export default class Edit extends Component {
   constructor(props) {
     super(props);
 
     const { navigation } = this.props;
-    const item = navigation.getParam('item', null);
-
+    const post = navigation.getParam('post', null);
     this.state = {
-      categoryId: item.categoryId,
-      categoryName: item.categoryName,
-      sakeName: item.sakeName,
-      starCount: 0,
-      text: '',
+      key: post.key,
+      categoryId: post.categoryId,
+      categoryName: post.categoryName,
+      sakeName: post.sakeName,
+      starCount: post.starCount,
+      text: post.text,
     };
   }
 
@@ -95,14 +95,9 @@ export default class Add extends Component {
     this.setState({ text });
   }
 
-  // dispatchはnavigationから発火させるのであった！ 
-  // onPressSave() {
-  //   const { navigation } = this.props;
-  //   navigation.dispatch({ type: 'LAUNCH' });
-  // }
-
   onPressSave = async () => {
     const {
+      key,
       categoryId,
       categoryName,
       sakeName,
@@ -113,18 +108,11 @@ export default class Add extends Component {
 
     Keyboard.dismiss();
 
-    const result = await firebase.createPost(categoryId, categoryName, sakeName, starCount, text);
+    const result = await firebase.updatePost(key, categoryId, categoryName, sakeName, starCount, text);
     if (result.error) {
       console.log(result.error)
     } else {
-      navigation.navigate('HomeTab');
-      this.setState({
-        categoryId: 0,
-        categoryName: '',
-        sakeName: '',
-        starCount: 0,
-        text: '',
-      });
+      navigation.pop();
     }
   }
 

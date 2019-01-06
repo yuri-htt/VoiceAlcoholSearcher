@@ -11,16 +11,16 @@ import CategoryIcon from '../categoryIcon';
 import styles from './styles';
 
 export default class CategoryCard extends Component {
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     const {
       item,
     } = this.props;
 
-    const post = item.item.post;
+    const post = {
+      ...item.item.post,
+      key: item.item.key,
+    }
+
     const postedDate = moment(post.timestamp).format('MM月DD日');
 
     return (

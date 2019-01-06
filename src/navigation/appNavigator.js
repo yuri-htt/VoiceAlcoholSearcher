@@ -4,6 +4,7 @@ import { createStackNavigator, NavigationActions } from 'react-navigation';
 /* screen */
 import MainTabNavigator from './mainTabNavigator';
 import AddScreen from '../screens/add/index';
+import EditScreen from '../screens/edit/index';
 import DetailScreen from '../screens/detail/index';
 
 const CardNavigator = createStackNavigator(
@@ -18,6 +19,7 @@ const CardNavigator = createStackNavigator(
       }, 
     },
     Add: { screen: AddScreen },
+    Edit: { screen: EditScreen },
     Detail: { screen: DetailScreen },
   },
   {
