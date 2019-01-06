@@ -23,6 +23,7 @@ export default createBottomTabNavigator(
       screen: createTabStack('HomeTab', HomeScreen),
       navigationOptions: () => ({
         tabBarIcon: HomeTabIcon,
+        gesturesEnabled: true,
       }),
     },
     PostTab: {
@@ -50,6 +51,6 @@ export default createBottomTabNavigator(
     tabBarComponent: TabBar,
     tabBarPosition: 'bottom',
     animationEnabled: false,
-    swipeEnabled: false,
+    swipeEnabled: true,
   },
 );

@@ -8,7 +8,15 @@ import DetailScreen from '../screens/detail/index';
 
 const CardNavigator = createStackNavigator(
   {
-    Main: { screen: MainTabNavigator, navigationOptions: { header: null } },
+    Main: { screen: MainTabNavigator, 
+      navigationOptions: {  
+        headerStyle: {
+          backgroundColor: '#FFF',
+          height: 44,
+        },
+        header: null,
+      }, 
+    },
     Add: { screen: AddScreen },
     Detail: { screen: DetailScreen },
   },
@@ -17,8 +25,9 @@ const CardNavigator = createStackNavigator(
       headerTitleStyle: {
         color: '#333',
       },
+      // Detail
       headerStyle: {
-        backgroundColor: '#fff',
+        backgroundColor: '#FFF',
         height: 44,
       },
     }),
@@ -31,18 +40,12 @@ const AppNavigator = createStackNavigator(
       screen: CardNavigator,
       navigationOptions: {
         header: null,
+        headerStyle: {
+          backgroundColor: '#FFF',
+          height: 44,
+        },
       },
     },
-  },
-  {
-    // mode: 'modal',
-    // headerMode: 'none',
-    navigationOptions: () => ({
-      header: null,
-      // headerTitleStyle: {
-      //   color: '#333',
-      // },
-    }),
   },
 );
 

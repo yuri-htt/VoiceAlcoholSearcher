@@ -5,7 +5,7 @@ import {
   applyMiddleware,
   combineReducers,
 } from 'redux';
-import { StatusBar, Platform, View } from 'react-native';
+import { View } from 'react-native';
 import {
   reduxifyNavigator,
   createReactNavigationReduxMiddleware,
@@ -108,7 +108,6 @@ export default class Navigation extends React.Component {
   render() {
     return(
       <View style={{ flex: 1 }}>
-        {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
         <Provider store={store}>
           <AppWithNavigationState />
         </Provider>

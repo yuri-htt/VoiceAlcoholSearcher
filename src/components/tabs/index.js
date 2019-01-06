@@ -7,15 +7,15 @@ import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 /* from app */
 import styles from './styles';
 
-export const HomeTabIcon = ({ tintColor }) => <Ionicon name="md-home" size={26} style={styles.icon} color={tintColor} />;
+export const HomeTabIcon = ({ tintColor }) => <Ionicon name="md-home" size={30} style={styles.icon} color={tintColor} />;
 export const PostTabIcon = ({ tintColor }) => (
-  <View style={styles.takeTab}>
+  <View style={[styles.takeTab]}>
     <View style={[styles.takeTabRounded, { borderColor: tintColor }]}>
-      <Ionicon name="md-add" size={18} style={styles.takeTabIcon} color={tintColor} />
+      <Ionicon name="md-add" size={22} style={styles.takeTabIcon} color={tintColor} />
     </View>
   </View>
 );
-export const BadgesTabIcon = ({ tintColor }) => <SimpleLineIcons name="badge" size={26} style={styles.icon} color={tintColor} />;
+export const BadgesTabIcon = ({ tintColor }) => <SimpleLineIcons name="badge" size={30} style={styles.icon} color={tintColor} />;
 
 export const TabBar = BottomTabBar;
 
