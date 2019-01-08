@@ -140,6 +140,13 @@ export default class Post extends Component {
       animation: false,
     });
 
+    if (this.state.convertedResults.length > 0)  {
+      this.setState({
+        searching: false,
+      });
+      return;
+    }
+
     await Voice.stop();
     // partialResultsを取得するのに少し時間がかかる
     await this.witForpartialResults();
@@ -298,7 +305,7 @@ export default class Post extends Component {
 
             </View>
 
-            <TouchableOpacity style={[styles.dismiss]} onPress={() => {this.setState({showModal: false})}}>
+            <TouchableOpacity style={[styles.dismiss]} onPress={() => this.setState({showModal: false, searching: false})}>
               <Ionicon name="ios-close-circle-outline" size={50} />
             </TouchableOpacity>
           </View>
