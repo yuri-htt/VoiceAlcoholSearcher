@@ -6,7 +6,7 @@
  * @flow
  */
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, Image, TouchableHighlight } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import Voice from 'react-native-voice';
 
 // 初期のローディング処理

@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {
   View,
   Text,
-  TouchableHighlight,
+  TouchableOpacity,
 } from 'react-native';
 import StarRating from 'react-native-star-rating';
 import moment from 'moment';
@@ -24,7 +24,7 @@ export default class CategoryCard extends Component {
     const postedDate = moment(post.timestamp).format('MM月DD日');
 
     return (
-      <TouchableHighlight onPress={() => this.onPressCard(post)} >
+      <TouchableOpacity onPress={() => this.onPressCard(post)} >
         <View style={styles.container} onLayout={this.onLayout}>
 
           <View style={styles.leftColumn}>
@@ -50,7 +50,7 @@ export default class CategoryCard extends Component {
             </View>
           </View>
         </View>
-      </TouchableHighlight>
+      </TouchableOpacity>
     );
   }
 

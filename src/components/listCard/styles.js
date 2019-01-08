@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Platform } from 'react-native';
 
 const styles = StyleSheet.create({
   container: {
@@ -13,6 +13,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFF',
     padding: 16,
     flexDirection: 'row',
+    elevation: 3,
   },
   header: {
     flexDirection: 'row',

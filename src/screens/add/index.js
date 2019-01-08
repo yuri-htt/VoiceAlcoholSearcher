@@ -25,7 +25,7 @@ export default class Add extends Component {
     this.state = {
       categoryId: item.categoryId,
       categoryName: item.categoryName,
-      sakeName: item.sakeName,
+      sakeName: item.name,
       starCount: 0,
       text: '',
     };

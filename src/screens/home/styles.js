@@ -85,6 +85,7 @@ const styles = StyleSheet.create({
   },
   timeLineCards: {
     marginTop: 16,
+    marginBottom: 32,
   },
   //empty
   empty: {

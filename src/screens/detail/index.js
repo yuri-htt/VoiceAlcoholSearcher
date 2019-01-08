@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, View, Image, TouchableHighlight } from 'react-native';
+import { Text, View } from 'react-native';
 import StarRating from 'react-native-star-rating';
 import moment from 'moment';
 import ActionButton from 'react-native-action-button';

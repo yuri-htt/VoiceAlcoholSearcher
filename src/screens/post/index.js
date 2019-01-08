@@ -3,7 +3,7 @@ import {
   Text, 
   View, 
   Image, 
-  TouchableHighlight, 
+  TouchableOpacity, 
   Modal, 
   Dimensions, 
   ActivityIndicator,
@@ -26,7 +26,10 @@ const { width, height } = Dimensions.get('window');
 export default class Post extends Component {
   state = {
     recognized: false,
+    recognized2: 'まだっす',
     error: '',
+    end: false,
+    end2: 'まだっす',
     started: false,
     results: [],
     partialResults: [],
@@ -42,6 +45,7 @@ export default class Post extends Component {
     super(props);
     Voice.onSpeechStart = this.onSpeechStart;
     Voice.onSpeechRecognized = this.onSpeechRecognized;
+    Voice.onSpeechEnd = this.onSpeechEnd;
     Voice.onSpeechError = this.onSpeechError;
     Voice.onSpeechResults = this.onSpeechResults;
     Voice.onSpeechPartialResults = this.onSpeechPartialResults;
@@ -86,6 +90,14 @@ export default class Post extends Component {
   onSpeechRecognized = e => {
     this.setState({
       recognized: true,
+      recognized2: '認識したっす',
+    });
+  };
+
+  onSpeechEnd = e => {
+    this.setState({
+      end: true,
+      end2: '終わったっす',
     });
   };
 
@@ -224,12 +236,12 @@ export default class Post extends Component {
   renderCandidateListCard(item) {
     if (item === undefined) return;
     return (
-      <TouchableHighlight onPress={() => this.onPressCard(item)}>
+      <TouchableOpacity onPress={() => this.onPressCard(item)}>
         <View style={[styles.candidateCard, {width: width - 64}]}>
           <CategoryIcon categoryName={item.categoryName} style={{ marginRight: 16 }}/>
           <Text style={styles.categoryCardTxt}>{item.name}</Text>
         </View>
-      </TouchableHighlight>
+      </TouchableOpacity>
     );
   }
 
@@ -286,9 +298,9 @@ export default class Post extends Component {
 
             </View>
 
-            <TouchableHighlight style={[styles.dismiss]} onPress={() => {this.setState({showModal: false})}}>
+            <TouchableOpacity style={[styles.dismiss]} onPress={() => {this.setState({showModal: false})}}>
               <Ionicon name="ios-close-circle-outline" size={50} />
-            </TouchableHighlight>
+            </TouchableOpacity>
           </View>
         </Modal>
       )
@@ -313,25 +325,28 @@ export default class Post extends Component {
             <Animated.View style={[styles.animateContainer, {transform: [{rotate: deg}]}]} >
               <Image style={styles.circle} source={images.dotsCircle} />
             </Animated.View>
-            <TouchableHighlight onPress={this._startRecognizing}>
+            <TouchableOpacity onPress={this._startRecognizing}>
               <Image style={styles.button} source={images.mike} />
-            </TouchableHighlight>
+            </TouchableOpacity>
           </View>
         </View>
-
+        <Text>Recognized</Text>
+        <Text>{this.state.recognized2}</Text>
+        <Text>End</Text>
+        <Text>{this.state.end2}</Text>
         <View style={{width: 280, height: 52}}>
-        {this.state.recognized &&
-          <TouchableHighlight onPress={ () => this.startSerching()} style={styles.primaryBtn}>
+        {this.state.end &&
+          <TouchableOpacity onPress={ () => this.startSerching()} style={styles.primaryBtn}>
             <Text style={styles.primaryBtnTxt}>お酒を検索する</Text>
-          </TouchableHighlight>
+          </TouchableOpacity>
         }
         </View>
         
         <View style={{width: 280, height: 52}}>
-        {this.state.recognized &&
-        <TouchableHighlight onPress={this._destroyRecognizer} style={styles.seondaryBtn}>
+        {this.state.end &&
+        <TouchableOpacity onPress={this._destroyRecognizer} style={styles.seondaryBtn}>
           <Text style={styles.secondaryBtnTxt}>クリア</Text>
-        </TouchableHighlight>
+        </TouchableOpacity>
         }
         </View>
         

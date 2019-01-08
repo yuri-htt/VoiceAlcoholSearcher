@@ -21,7 +21,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     borderRadius: 6,
     borderWidth: 2,
-    marginTop: Platform.OS === 'ios' ? 0 : 2,
+    marginTop: Platform.OS === 'ios' ? 0 : 0,
   },
   takeTabIcon: {
     marginLeft: Platform.OS === 'ios' ? 1 : 0,
