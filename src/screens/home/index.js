@@ -60,7 +60,6 @@ export default class Home extends Component {
       fetching,
       loading,
     } = this.state;
-
     return (
       <ScrollView style={styles.container}>
         <View testID="Home">

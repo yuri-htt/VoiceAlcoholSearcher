@@ -26,10 +26,8 @@ const { width, height } = Dimensions.get('window');
 export default class Post extends Component {
   state = {
     recognized: false,
-    recognized2: 'まだっす',
     error: '',
     end: false,
-    end2: 'まだっす',
     started: false,
     results: [],
     partialResults: [],
@@ -90,14 +88,12 @@ export default class Post extends Component {
   onSpeechRecognized = e => {
     this.setState({
       recognized: true,
-      recognized2: '認識したっす',
     });
   };
 
   onSpeechEnd = e => {
     this.setState({
       end: true,
-      end2: '終わったっす',
     });
   };
 
@@ -134,7 +130,6 @@ export default class Post extends Component {
 
   async startSerching() {
     this.setState({
-      started: '',
       showModal: true,
       searching: true,
       animation: false,
@@ -223,6 +218,7 @@ export default class Post extends Component {
     }
     this.setState({
       recognized: false,
+      end: false,
       error: '',
       results: [],
       partialResults: [],
@@ -240,10 +236,10 @@ export default class Post extends Component {
     Voice.start('ja-JP');
   };
 
-  renderCandidateListCard(item) {
+  renderCandidateListCard(item, index) {
     if (item === undefined) return;
     return (
-      <TouchableOpacity onPress={() => this.onPressCard(item)}>
+      <TouchableOpacity onPress={() => this.onPressCard(item)} key={`match-list-${index}-View`}>
         <View style={[styles.candidateCard, {width: width - 64}]}>
           <CategoryIcon categoryName={item.categoryName} style={{ marginRight: 16 }}/>
           <Text style={styles.categoryCardTxt}>{item.name}</Text>
@@ -270,6 +266,7 @@ export default class Post extends Component {
       return (
         <Modal
           animationType="slide"
+          onRequestClose={() => this.setState({showModal: false})}
           transparent
           visible
         >
@@ -281,21 +278,23 @@ export default class Post extends Component {
             editable={false}
           />
 
-            <View style={[styles.modal, {width, height: height - 248 }]} >
+            <View style={[styles.modal, {width, height: height - 214}]} >
 
             {this.state.searching &&
-            <View style={[styles.modal, styles.center]} >
-              <ActivityIndicator size="large" color="#0000ff" />
+            <View style={[styles.modal, {width, height: height - 190 }, styles.center]} >
+              <ActivityIndicator size="large" color="#FF9800" />
             </View>
             }
 
+            <ScrollView>
             {!this.state.searching　&& this.state.matchLists.length > 0 && this.state.matchLists.map((result, index) => {
               return (
-                <ScrollView key={`partial-result-${index}-View`}>
-                {result.hits.map(hit => this.renderCandidateListCard(hit))}
-                </ScrollView>
+                <View key={`partial-result-${index}-View`}>
+                {result.hits.map(hit => this.renderCandidateListCard(hit, index))}
+                </View>
               )
             })}
+            </ScrollView>
 
             {!this.state.searching　&& this.state.matchLists.length === 0 && 
              <View style={{flex: 1, backgroundColor: 'red'}}>
@@ -317,13 +316,9 @@ export default class Post extends Component {
         <Text style={styles.guideTxt}>お酒の名前を教えてください。</Text>
         <View style={styles.voiceContainer}>
           <ImageBackground style={styles.voice} source={images.voiceShape}>
-          {this.state.results.map((result, index) => {
-            return (
-            <Text key={`result-${index}`} style={styles.stat}>
-              {result}
+            <Text style={styles.stat}>
+              {this.state.results[0]}
             </Text>
-            );
-          })}
           </ImageBackground>
         </View>
   
@@ -337,10 +332,6 @@ export default class Post extends Component {
             </TouchableOpacity>
           </View>
         </View>
-        <Text>Recognized</Text>
-        <Text>{this.state.recognized2}</Text>
-        <Text>End</Text>
-        <Text>{this.state.end2}</Text>
         <View style={{width: 280, height: 52}}>
         {this.state.end &&
           <TouchableOpacity onPress={ () => this.startSerching()} style={styles.primaryBtn}>

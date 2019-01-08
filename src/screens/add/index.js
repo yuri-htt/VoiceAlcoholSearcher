@@ -40,7 +40,7 @@ export default class Add extends Component {
     } = this.state;
     return (
       <View style={styles.container}>
-        <View style={[{width}, styles.contents]}>
+        <View style={[styles.contents]}>
           <View style={styles.sake}>
               <CategoryIcon categoryName={categoryName} size={50} style={{marginRight: 16}}/>
             <Text style={styles.name}>{sakeName}</Text>

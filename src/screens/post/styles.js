@@ -4,35 +4,38 @@ import styleConstants from '../../styleConstants';
 
 
 const styles = StyleSheet.create({
+  guideTxt: {
+    fontSize: 16,
+  },
   voiceContainer: {
     // backgroundColor: 'green',
     marginTop: 32,
   },
   voice: {
     width: 300 * 0.6,
-    height: 180* 0.6,
+    height: 180 * 0.6,
     justifyContent: 'center',
     alignItems: 'center',
   },
   animateContainer: {
-    width: 120, 
-    height: 120,
+    width: 110, 
+    height: 110,
     position: 'absolute',
   },
   mikeContainer: {
     // position: 'absolute',
-    marginTop: 64,
+    marginTop: 54,
     justifyContent: 'center',
     alignItems: 'center',
   },
   button: {
-    width: 50,
-    height: 50,
+    width: 40,
+    height: 40,
   },
   circle: {
     position: 'absolute',
-    width: 120, 
-    height: 120,
+    width: 110, 
+    height: 110,
   },
   container: {
     flex: 1,
@@ -41,10 +44,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFF',
   },
   modalContainer: {
-    justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'white',
-    paddingTop: 46 + 32,
+    marginTop: 32,
   },
   modal: {
     backgroundColor: 'white',
@@ -65,14 +67,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginBottom: 8,
     borderRadius: 4,
-    shadowOffset: { width: 4, height: 4 },
-    shadowColor: 'black',
-    shadowOpacity: 0.25,
-    backgroundColor: '#FFF',
     padding: 16,
     alignItems: 'center',
-    borderWidth: 0.2,
-    borderColor: '#BDBDBD',
+    elevation: 1,
   },
   icon: {
     width: 36,

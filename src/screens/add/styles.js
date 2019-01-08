@@ -7,9 +7,10 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     backgroundColor: '#FFF',
+    paddingHorizontal: 16,
   },
   contents: {
-    padding: 16,
+    paddingBottom: 16,
     justifyContent: 'center',
   },
   sake: {
@@ -34,7 +35,7 @@ const styles = StyleSheet.create({
     height: 50,
   },
   textInputContainer: {
-    height: 200,
+    height: 180,
     marginBottom: 32,
   },
   textInput: {
