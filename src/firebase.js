@@ -69,6 +69,7 @@ class Firebase{
           reject(err);
           return;
         }
+
         let array = [];
         content.results.map((result) => {
           array = array.concat(result.hits)
@@ -79,6 +80,7 @@ class Firebase{
             return x.name === v.name 
           }) === i
         });
+
         resolve(uniqueArray)
       });
     })
@@ -113,7 +115,7 @@ class Firebase{
 
   createPost = async (categoryId = 0, categoryName = '', sakeName = '', starCount = 0, text = '') => {
     try {
-      await this.post.add({
+      const post = {
         categoryId,
         categoryName,
         sakeName,
@@ -121,9 +123,10 @@ class Firebase{
         text,
         timestamp: Date.now(),
         user: this.user.doc(`${uid}`),
-      });
+      }
+      await this.post.add(post);
 
-      return true
+      return { post }
     } catch ({ message }) {
       return { error: message };
     }

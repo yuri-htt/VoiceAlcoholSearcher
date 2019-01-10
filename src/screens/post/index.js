@@ -290,7 +290,7 @@ export default class Post extends Component {
             {!this.state.searching　&& this.state.matchLists.length > 0 && this.state.matchLists.map((result, index) => {
               return (
                 <View key={`partial-result-${index}-View`}>
-                {result.hits.map(hit => this.renderCandidateListCard(hit, index))}
+                  {this.renderCandidateListCard(result, index)}
                 </View>
               )
             })}
