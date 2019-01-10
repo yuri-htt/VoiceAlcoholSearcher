@@ -52,8 +52,11 @@ class Firebase{
   })
 
   getIndex = async (keyWords) => {
+    let uniqueKeyWords = keyWords.filter(function (x, i, self) {
+      return self.indexOf(x) === i;
+    });
     let queries = [];
-    keyWords.map((keyWord) => {
+    uniqueKeyWords.map((keyWord) => {
       queries.push({
         indexName: 'masterSake',
         query: keyWord,
@@ -66,8 +69,17 @@ class Firebase{
           reject(err);
           return;
         }
-        
-        resolve(content.results)
+        let array = [];
+        content.results.map((result) => {
+          array = array.concat(result.hits)
+        })
+
+        let uniqueArray = array.filter((x, i, self) => {
+          return self.findIndex(v => {
+            return x.name === v.name 
+          }) === i
+        });
+        resolve(uniqueArray)
       });
     })
   }
