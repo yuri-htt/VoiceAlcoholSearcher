@@ -15,6 +15,8 @@ import {
   RefreshControl,
   ActivityIndicator,
 } from 'react-native';
+import { connect } from 'react-redux';
+import { withNavigationFocus } from 'react-navigation';
 
 import CategoryCard from '../../components/categoryCard';
 import ListCard from '../../components/listCard';
@@ -22,6 +24,13 @@ import firebase from '../../firebase';
 import images from '../../components/images';
 import styles from './styles';
 
+@withNavigationFocus
+@connect(state => ({
+  currentScreen: state.screen,
+  app: state.app,
+  user: state.user,
+  posts: state.posts,
+}))
 export default class Home extends Component {
   constructor(props) {
     super(props);
@@ -42,17 +51,41 @@ export default class Home extends Component {
   }
 
   getPosts = async (cursor = null) => {
+    const { navigation } = this.props;
+
     this.setState({ fetching: true });
     const response = await firebase.getPosts(cursor);
     if (!response.error) {
       this.setState({
         posts: response.data,
       });
+      navigation.dispatch({ type: 'SET_POSTS', payload: response.data });
     } else {
       console.log(response.error)
     }
     this.setState({ fetching: false });
   }
+
+  // componentDidUpdate(prevProps, prevState) {
+  //   console.log('HOME componentDidUpdate')
+  //   console.log(prevProps)
+  //   console.log(prevState)
+  // }
+
+  // static getDerivedStateFromProps(nextProps, prevState) {
+  //   console.log('HOME getDerivedStateFromProps')
+  //   console.log(nextProps)
+  //   console.log(prevState)
+
+  //   // Return null to indicate no change to state.
+  //   return null;
+  // }
+
+  // UNSAFE_componentWillReceiveProps(nextProps) {
+  //   console.log('HOME UNSAFE_componentWillReceiveProps')
+  //   console.log(nextProps)
+  // }
+
 
   render() {
     const {
@@ -60,14 +93,15 @@ export default class Home extends Component {
       fetching,
       loading,
     } = this.state;
+
+    console.log('LOOOOOK')
+    console.log(this.props)
     return (
       <ScrollView style={styles.container}>
         <View testID="Home">
 
           <View style={styles.header}>
             <View style={styles.degree}>
-              {/* <View style={styles.degreeIcon} /> */}
-              {/* <Text style={styles.degreeTxt}>お酒をたしなむ人</Text> */}
               <Image
                 style={{width: 60, height: 60}}
                 source={images.logo}
