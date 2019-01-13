@@ -1,10 +1,3 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow
- */
 import React, { Component } from 'react';
 import {
   Text,
@@ -66,36 +59,13 @@ export default class Home extends Component {
     this.setState({ fetching: false });
   }
 
-  // componentDidUpdate(prevProps, prevState) {
-  //   console.log('HOME componentDidUpdate')
-  //   console.log(prevProps)
-  //   console.log(prevState)
-  // }
-
-  // static getDerivedStateFromProps(nextProps, prevState) {
-  //   console.log('HOME getDerivedStateFromProps')
-  //   console.log(nextProps)
-  //   console.log(prevState)
-
-  //   // Return null to indicate no change to state.
-  //   return null;
-  // }
-
-  // UNSAFE_componentWillReceiveProps(nextProps) {
-  //   console.log('HOME UNSAFE_componentWillReceiveProps')
-  //   console.log(nextProps)
-  // }
-
-
   render() {
     const {
-      posts,
       fetching,
       loading,
     } = this.state;
+    const { posts } = this.props;
 
-    console.log('LOOOOOK')
-    console.log(this.props)
     return (
       <ScrollView style={styles.container}>
         <View testID="Home">
@@ -111,7 +81,7 @@ export default class Home extends Component {
 
             <View style={styles.summary}>
               <View style={styles.total}>
-                <Text style={styles.num}>{posts.length}</Text>
+                <Text style={styles.num}>{posts.data.length}</Text>
                 <Text style={styles.label}>杯</Text>
               </View>
               <View style={styles.badges}>
@@ -139,16 +109,16 @@ export default class Home extends Component {
 
           <View style={styles.timeLine}>
             <Text style={styles.headLine}>タイムライン</Text>
-            {posts.length === 0 &&
+            {posts.data.length === 0 &&
               <View style={styles.empty}>
                 <Text style={styles.emptyTxt}>まだ飲んだお酒はありません</Text>
                 <Text style={styles.emptyTxt}>さっそく今晩飲みに行きませんか？</Text>
               </View>
             }
-            {posts.length > 0 &&
+            {posts.data.length > 0 &&
             <View style={styles.timeLineCards}>
               <FlatList
-                data={posts}
+                data={posts.data}
                 keyExtractor={item => item.key}
                 renderItem={item => <ListCard item={item} {...this.props} />}
                 refreshControl={(
