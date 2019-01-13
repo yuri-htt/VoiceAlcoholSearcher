@@ -115,6 +115,7 @@ class Firebase{
 
   createPost = async (categoryId = 0, categoryName = '', sakeName = '', starCount = 0, text = '') => {
     try {
+      let newPost;
       const post = {
         categoryId,
         categoryName,
@@ -124,9 +125,14 @@ class Firebase{
         timestamp: Date.now(),
         user: this.user.doc(`${uid}`),
       }
-      await this.post.add(post);
+      await this.post.add(post).then(ref => {
+        newPost = {
+          key: ref.id,
+          post,
+        };
+      });
 
-      return { post }
+      return { newPost }
     } catch ({ message }) {
       return { error: message };
     }

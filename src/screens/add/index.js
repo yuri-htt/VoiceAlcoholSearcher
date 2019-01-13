@@ -95,12 +95,6 @@ export default class Add extends Component {
     this.setState({ text });
   }
 
-  // dispatchはnavigationから発火させるのであった！ 
-  // onPressSave() {
-  //   const { navigation } = this.props;
-  //   navigation.dispatch({ type: 'LAUNCH' });
-  // }
-
   onPressSave = async () => {
     const {
       categoryId,
@@ -117,6 +111,7 @@ export default class Add extends Component {
     if (result.error) {
       console.log(result.error)
     } else {
+      navigation.dispatch({ type: 'ADD_POST', payload: result });
       navigation.navigate('HomeTab');
       this.setState({
         categoryId: 0,
