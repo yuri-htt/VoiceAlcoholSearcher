@@ -86,7 +86,7 @@ class Firebase{
     })
   }
 
-  getPosts = async (uid = '', cursor = null, num = 5) => {
+  getPosts = async (uid = '', cursor = null, num = 100) => {
     let ref = this.post.where('user', '==', this.user.doc(uid)).orderBy('timestamp', 'desc').limit(num);
     try {
       if (cursor) {
