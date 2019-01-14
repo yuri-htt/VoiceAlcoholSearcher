@@ -140,16 +140,17 @@ class Firebase{
 
   updatePost = async (key = '', categoryId = 0, categoryName = '', sakeName = '', starCount = 0, text = '') => {
     try {
-      await this.post.doc(`${key}`).update({
+      const post = {
         categoryId,
         categoryName,
         sakeName,
         starCount,
         text,
         timestamp: Date.now(),
-      });
+      }
+      await this.post.doc(`${key}`).update(post);
 
-      return true
+      return { post }
     } catch ({ message }) {
       return { error: message };
     }

@@ -56,6 +56,7 @@ export default class CategoryCard extends Component {
 
   onPressCard(post) {
     const { navigation } = this.props;
+    navigation.dispatch({ type: 'SET_POST', payload: post });
     navigation.push('Detail', { post });
   }
 }

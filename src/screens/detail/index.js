@@ -4,27 +4,32 @@ import StarRating from 'react-native-star-rating';
 import moment from 'moment';
 import ActionButton from 'react-native-action-button';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import { connect } from 'react-redux';
 
 import CategoryIcon from '../../components/categoryIcon';
 import styles from './styles';
 
+@connect(state => ({
+  post: state.post,
+}))
 export default class Detail extends Component {
   render() {
-    const { navigation } = this.props;
-    const post = navigation.getParam('post', null);
-    const postedDate = moment(post.timestamp).format('MM月DD日');
+    const {
+      post 
+    } = this.props;
+    const postedDate = moment(post.data.timestamp).format('MM月DD日');
 
     return (
       <View style={styles.container}>
         <View style={styles.header}>
-          <CategoryIcon categoryName={post.categoryName} size={60} style={styles.icon} />
-          <Text style={styles.name}>{post.sakeName}</Text>
+          <CategoryIcon categoryName={post.data.categoryName} size={60} style={styles.icon} />
+          <Text style={styles.name}>{post.data.sakeName}</Text>
         </View>
         <View style={styles.stars}>
           <StarRating
             disabled
             maxStars={5}
-            rating={post.starCount}
+            rating={post.data.starCount}
             starSize={16}
             starStyle={{ marginRight: 4 }}
             containerStyle={{ justifyContent: 'flex-start'}}
@@ -32,7 +37,7 @@ export default class Detail extends Component {
             emptyStarColor="orange"
           />
         </View>
-        <Text style={styles.contentTxt}>{post.text}</Text>
+        <Text style={styles.contentTxt}>{post.data.text}</Text>
         <Text style={styles.dateTxt}>{postedDate}</Text>
 
         <ActionButton 
@@ -47,7 +52,6 @@ export default class Detail extends Component {
 
   onOPressEdit() {
     const { navigation } = this.props;
-    const post = navigation.getParam('post', null);
-    navigation.push('Edit', { post });
+    navigation.push('Edit');
   }
 }

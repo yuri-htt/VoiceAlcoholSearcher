@@ -8,6 +8,7 @@ import {
   Keyboard
 } from 'react-native';
 import StarRating from 'react-native-star-rating';
+import { connect } from 'react-redux';
 
 import CategoryIcon from '../../components/categoryIcon';
 import firebase from '../../firebase';
@@ -15,19 +16,22 @@ import styles from './styles';
 
 const { width } = Dimensions.get('window');
 
+@connect(state => ({
+  post: state.post,
+  user: state.user,
+}))
 export default class Edit extends Component {
   constructor(props) {
     super(props);
 
-    const { navigation } = this.props;
-    const post = navigation.getParam('post', null);
+    const { post } = this.props;
     this.state = {
-      key: post.key,
-      categoryId: post.categoryId,
-      categoryName: post.categoryName,
-      sakeName: post.sakeName,
-      starCount: post.starCount,
-      text: post.text,
+      key: post.data.key,
+      categoryId: post.data.categoryId,
+      categoryName: post.data.categoryName,
+      sakeName: post.data.sakeName,
+      starCount: post.data.starCount,
+      text: post.data.text,
     };
   }
 
@@ -104,7 +108,10 @@ export default class Edit extends Component {
       starCount,
       text,
     } = this.state;
-    const { navigation } = this.props;
+    const { 
+      user,
+      navigation,
+    } = this.props;
 
     Keyboard.dismiss();
 
@@ -112,6 +119,16 @@ export default class Edit extends Component {
     if (result.error) {
       console.log(result.error)
     } else {
+      navigation.dispatch({ type: 'UPDATE_POST', payload: result });
+      const response = await firebase.getPosts(user.uid);
+      if (!response.error) {
+        this.setState({
+          posts: response.data,
+        });
+        navigation.dispatch({ type: 'SET_POSTS', payload: response.data });
+      } else {
+        console.log(response.error)
+      }
       navigation.pop();
     }
   }
