@@ -76,7 +76,10 @@ export default class Home extends Component {
                 style={{width: 60, height: 60}}
                 source={images.logo}
               />
-              <Text>SAKE BOARD</Text>
+              <Image
+                style={{width: 60, height: 7}}
+                source={images.logoTxt}
+              />
             </View>
 
             <View style={styles.summary}>
