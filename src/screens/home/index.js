@@ -95,14 +95,14 @@ export default class Home extends Component {
             <Text style={styles.headLine}>カテゴリ</Text>
             <View style={styles.categoryCards} />
             <View style={styles.row}>
-              <CategoryCard categoryName="カクテル" />
-              <CategoryCard categoryName="ワイン" />
-              <CategoryCard categoryName="ビール" />
+              <CategoryCard categoryName="カクテル" {...this.props} />
+              <CategoryCard categoryName="ワイン" {...this.props} />
+              <CategoryCard categoryName="ビール" {...this.props} />
             </View>
             <View style={styles.row}>
-              <CategoryCard categoryName="日本酒" />
-              <CategoryCard categoryName="焼酎" />
-              <CategoryCard categoryName="ウイスキー" />
+              <CategoryCard categoryName="日本酒" {...this.props} />
+              <CategoryCard categoryName="焼酎" {...this.props} />
+              <CategoryCard categoryName="ウイスキー" {...this.props} />
             </View>
 
           </View>

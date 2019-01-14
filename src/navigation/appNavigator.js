@@ -6,6 +6,7 @@ import MainTabNavigator from './mainTabNavigator';
 import AddScreen from '../screens/add/index';
 import EditScreen from '../screens/edit/index';
 import DetailScreen from '../screens/detail/index';
+import ListScreen from '../screens/list/index';
 
 const CardNavigator = createStackNavigator(
   {
@@ -21,6 +22,7 @@ const CardNavigator = createStackNavigator(
     Add: { screen: AddScreen },
     Edit: { screen: EditScreen },
     Detail: { screen: DetailScreen },
+    List: { screen: ListScreen },
   },
   {
     navigationOptions: () => ({

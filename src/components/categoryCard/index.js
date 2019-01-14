@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 import {
-  View,
   Text,
   Image,
+  TouchableOpacity,
 } from 'react-native';
 
 import images from '../images';
@@ -43,13 +43,21 @@ export default class CategoryCard extends Component {
     } = this.props;
 
     return (
-      <View style={styles.categoryCard}>
+      <TouchableOpacity style={styles.categoryCard} onPress={() => this.onPressCard()}>
         <Image
           style={styles.icon}
           source={this.getCategoryIcon(categoryName)}
         />
         <Text style={styles.categoryCardTxt}>{categoryName}</Text>
-      </View>
+      </TouchableOpacity>
     );
+  }
+
+  onPressCard() {
+    const { 
+      navigation,
+      categoryName,
+     } = this.props;
+    navigation.push('List', { categoryName });
   }
 }
