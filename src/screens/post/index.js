@@ -62,10 +62,10 @@ export default class Post extends Component {
       Animated.timing(
         this.state.dotsCircleDegree, {
           toValue: toValue, 
-          duration: 1000, 
-          delay: 1000
+          duration: 1000,
         }
       ),
+      Animated.delay(2000),
     ])
     .start((event) => {
       toValue++;
@@ -135,17 +135,10 @@ export default class Post extends Component {
       animation: false,
     });
 
-    if (this.state.convertedResults.length > 0)  {
-      this.setState({
-        searching: false,
-      });
-      return;
-    }
-
     await Voice.stop();
-    // partialResultsを取得するのに少し時間がかかる
-    await this.witForpartialResults();
+    await this.waitForpartialResults();
     await this.convertAllTexts()
+    
     console.log(this.state.convertedResults)
 
     const response = await firebase.getIndex(this.state.convertedResults);
@@ -164,7 +157,7 @@ export default class Post extends Component {
     }
   }
 
-  witForpartialResults() {
+  waitForpartialResults() {
     return new Promise((resolve) => {
       setTimeout(() => {
         return resolve();
@@ -178,20 +171,25 @@ export default class Post extends Component {
       const uniqueAllCandidates = allCandidates.filter((x, i, self) => {
         return self.indexOf(x) === i
       });
-      uniqueAllCandidates.map((result, index) => {
-        this.getConvertedText(result)
-        .then(data => {
-          this.setState({
-            convertedResults: this.state.convertedResults.concat(data.converted)
+      if (uniqueAllCandidates.length > 0) {
+        uniqueAllCandidates.map((result, index) => {
+          this.getConvertedText(result)
+          .then(data => {
+            this.setState({
+              convertedResults: this.state.convertedResults.concat(data.converted)
+            })
           })
-        })
-        .then(() => {
-          if (this.state.partialResults.length === index + 1) {
-            return resolve();
-          }
-        })
-        .catch(error => console.error(error));
-      });
+          .then(() => {
+            if (this.state.partialResults.length === index + 1) {
+              return resolve();
+            }
+          })
+          .catch(error => console.log(error));
+        });
+      } else {
+        this.setState({searching: false});
+      }
+      
     })
   }
 
@@ -262,6 +260,9 @@ export default class Post extends Component {
       outputRange: ['0deg', '360deg']
     });
 
+    const NoSpeetchInputError = (this.state.error !== '') && (this.state.error === '{"message":"6/No speech input"}')
+    const NoMatchError = (this.state.error !== '') && (this.state.error === '{"message":"7/No match"}')
+
     if (this.state.showModal) {
       return (
         <Modal
@@ -297,8 +298,8 @@ export default class Post extends Component {
             </ScrollView>
 
             {!this.state.searching　&& this.state.matchLists.length === 0 && 
-             <View style={{flex: 1, backgroundColor: 'red'}}>
-              <Text>該当0件だよ</Text>
+             <View style={{flex: 1}}>
+              <Text>該当0件</Text>
               </View>
             }
 
@@ -332,19 +333,37 @@ export default class Post extends Component {
             </TouchableOpacity>
           </View>
         </View>
-        <View style={{width: 280, height: 52}}>
-        {this.state.end &&
-          <TouchableOpacity onPress={ () => this.startSerching()} style={styles.primaryBtn}>
-            <Text style={styles.primaryBtnTxt}>検索する</Text>
+
+        <View style={{height: 104, justifyContent: 'center', alignItems: 'center'}}>
+        {NoSpeetchInputError &&
+          <TouchableOpacity onPress={this._destroyRecognizer} style={styles.seondaryBtn}>
+            <Text style={styles.secondaryBtnTxt}>再トライ</Text>
           </TouchableOpacity>
         }
-        </View>
+
+        {NoMatchError &&
+          <TouchableOpacity onPress={this._destroyRecognizer} style={styles.seondaryBtn}>
+            <Text style={styles.secondaryBtnTxt}>再トライ</Text>
+          </TouchableOpacity>
+        }
         
-        <View style={{width: 280, height: 52}}>
-        {this.state.end &&
-        <TouchableOpacity onPress={this._destroyRecognizer} style={styles.seondaryBtn}>
-          <Text style={styles.secondaryBtnTxt}>クリア</Text>
-        </TouchableOpacity>
+        
+        {!NoSpeetchInputError && !NoMatchError && this.state.end &&
+          <View>
+            <View style={{width: 280, height: 52}}>
+            {this.state.end &&
+              <TouchableOpacity onPress={ () => this.startSerching()} style={styles.primaryBtn}>
+                <Text style={styles.primaryBtnTxt}>検索する</Text>
+              </TouchableOpacity>
+            }
+            </View>
+            
+            <View style={{width: 280, height: 52}}>
+              <TouchableOpacity onPress={this._destroyRecognizer} style={styles.seondaryBtn}>
+                <Text style={styles.secondaryBtnTxt}>クリア</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
         }
         </View>
         

@@ -36,7 +36,6 @@ export default class Home extends Component {
 
     this.state = {
       posts: [],
-      fetching: false,
       loading: true,
     };
   }
@@ -83,7 +82,6 @@ export default class Home extends Component {
   getPosts = async (cursor = null) => {
     const { navigation } = this.props;
 
-    this.setState({ fetching: true });
     const response = await firebase.getPosts(cursor);
     if (!response.error) {
       this.setState({
@@ -93,7 +91,6 @@ export default class Home extends Component {
     } else {
       console.log(response.error)
     }
-    this.setState({ fetching: false });
   }
 
   onPressOK() {
@@ -112,7 +109,6 @@ export default class Home extends Component {
 
   render() {
     const {
-      fetching,
       loading,
     } = this.state;
     const { 
@@ -180,7 +176,6 @@ export default class Home extends Component {
                 renderItem={item => <ListCard item={item} {...this.props} />}
                 refreshControl={(
                   <RefreshControl
-                    refreshing={fetching}
                     onRefresh={this.onRefresh}
                   />
                 )}
