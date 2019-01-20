@@ -87,6 +87,51 @@ const styles = StyleSheet.create({
     marginTop: 16,
     marginBottom: 32,
   },
+  // model
+  modalContainer: {
+    backgroundColor: 'rgba(0,0,0,.6)',
+    justifyContent: 'center', 
+    alignItems: 'center',
+  },
+  modal: {
+    backgroundColor: '#FFF',
+    justifyContent: 'center', 
+    alignItems: 'center',
+    width: 300,
+    height: 400,
+  },
+  primaryBtn: {
+    marginVertical: 8,
+    width: 300 - 64,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: 'black',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  primaryBtnTxt: {
+    fontSize: 16,
+    color: 'white', 
+    fontWeight: '600',
+  },
+  modalImg: {
+    width: 150,
+    height: 150,
+    marginBottom: 16,
+  },
+  modalTitleTxt: {
+    color: '#212121',
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginBottom: 8,
+  },
+  modalContentTxt: {
+    color: '#212121',
+    fontSize: 12,
+    textAlign: 'center',
+    marginBottom: 16,
+    lineHeight: 12 * 1.5,
+  },
   //empty
   empty: {
     height: 200, 

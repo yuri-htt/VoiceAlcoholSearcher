@@ -335,7 +335,7 @@ export default class Post extends Component {
         <View style={{width: 280, height: 52}}>
         {this.state.end &&
           <TouchableOpacity onPress={ () => this.startSerching()} style={styles.primaryBtn}>
-            <Text style={styles.primaryBtnTxt}>お酒を検索する</Text>
+            <Text style={styles.primaryBtnTxt}>検索する</Text>
           </TouchableOpacity>
         }
         </View>

@@ -3,8 +3,6 @@ import algoliasearch from 'algoliasearch/reactnative';
 
 import CONFIG from './config';
 
-const GOO_API_KEY = CONFIG.GOO_API_KEY;
-
 // Algolia クライアントを設定
 const ALGOLIA_ID = CONFIG.ALGOLIA_ID;
 const ALGOLIA_ADMIN_KEY = CONFIG.ALGOLIA_ADMIN_KEY;
@@ -27,29 +25,33 @@ class Firebase{
   }
 
   init = async () => new Promise(resolve => {
-    let userCollection = this.user;
     firebase.auth().onAuthStateChanged(function(user) {
 
       if (user) {
+        // アプリ使用２回目以降(既にuidが発行済)
         this.uid = user.uid;
         uid = user.uid
+
       } else {
+        // アプリ使用初回(新しくuidを発行)
         firebase.auth().signInAnonymously()
         .then(() => {
           this.uid = (firebase.auth().currentUser || {}).uid;
           uid = (firebase.auth().currentUser || {}).uid;
-          userCollection.doc(`${this.uid}`).set({
-            name: '匿名',
-          });
         })
         .catch(error => {
           console.log('ERROR:' + error);
         });
       }
-
-      resolve(this.uid)
     });
+
+    resolve(uid)
   })
+
+  getUid() {
+    return uid;
+  }
+
 
   getIndex = async (keyWords) => {
     let uniqueKeyWords = keyWords.filter(function (x, i, self) {
@@ -63,8 +65,8 @@ class Firebase{
       })
     });
 
-    return new Promise((resolve, reject ) => {
-      algolia.search(queries, function (err, content) {
+    return new Promise((resolve, reject) => {
+      algolia.search(queries, (err, content) => {
         if (err) {
           reject(err);
           return;
@@ -157,6 +159,5 @@ class Firebase{
   }
 }
 
-// KAORU: 呼び出す側でnewした方が良い?
 const fire = new Firebase();
 export default fire;

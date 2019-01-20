@@ -2,11 +2,15 @@ import React, { Component } from 'react';
 import {
   Text,
   View,
+  Modal,
   Image,
-  ScrollView,
   FlatList,
+  Dimensions,
+  ScrollView,
   RefreshControl,
+  TouchableOpacity,
   ActivityIndicator,
+  PermissionsAndroid,
 } from 'react-native';
 import { connect } from 'react-redux';
 import { withNavigationFocus } from 'react-navigation';
@@ -16,6 +20,8 @@ import ListCard from '../../components/listCard';
 import firebase from '../../firebase';
 import images from '../../components/images';
 import styles from './styles';
+
+const { width, height } = Dimensions.get('window');
 
 @withNavigationFocus
 @connect(state => ({
@@ -36,11 +42,42 @@ export default class Home extends Component {
   }
 
   async componentDidMount() {
+    const { navigation } = this.props;
+
+    // ユーザーの取得
     const uid = await firebase.init();
-    this.getPosts(uid);
-    this.setState({
-      loading: false,
-    })
+
+    // アプリの使用が２回目以降のユーザー
+    if (uid) {
+      navigation.dispatch({ type: 'SET_USER', payload: uid });
+      this.getPosts(uid);
+      this.setState({ loading: false })
+
+      // マイクの権限確認
+      const isGranted = await PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.RECORD_AUDIO);
+      if (!isGranted) {
+        this.requestMikePermission()
+      }
+    }
+  }
+
+  async requestMikePermission() {
+    try {
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
+        {
+          'title': 'Microphone Permission',
+          'message': 'SAKE BOARD needs access to your microphone'
+        }
+      )
+      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+        console.log("You can use the camera")
+      } else {
+        console.log("Camera permission denied")
+      }
+    } catch (err) {
+      console.warn(err)
+    }
   }
 
   getPosts = async (cursor = null) => {
@@ -59,12 +96,29 @@ export default class Home extends Component {
     this.setState({ fetching: false });
   }
 
+  onPressOK() {
+    const { navigation } = this.props;
+    navigation.dispatch({ type: 'SET_STARTER_MODAL', payload: false });
+    const uid = firebase.getUid();
+    console.log(uid)
+    navigation.dispatch({ type: 'SET_USER', payload: uid });
+    this.requestMikePermission();
+  }
+
+  closeStarterModal() {
+    const { navigation } = this.props;
+    navigation.dispatch({ type: 'SET_STARTER_MODAL', payload: false });
+  }
+
   render() {
     const {
       fetching,
       loading,
     } = this.state;
-    const { posts } = this.props;
+    const { 
+      posts,
+      app,
+    } = this.props;
 
     return (
       <ScrollView style={styles.container}>
@@ -140,6 +194,30 @@ export default class Home extends Component {
           </View>
 
         </View>
+
+        {app.isFirstTime &&
+          <Modal
+            animationType="fade"
+            onRequestClose={() => this.closeStarterModal()}
+            transparent
+            visible
+          >
+            <View style={[styles.modalContainer, { width, height }]}>
+              <View style={styles.modal}>
+              <Image
+                style={styles.modalImg}
+                source={images.logoHeart}
+              />
+                <Text style={styles.modalTitleTxt}>DLありがとうございます！</Text>
+                <Text style={styles.modalContentTxt}>{'SAKE BOARDを使うために\nマイクへのアクセス許可をお願いします！'}</Text>
+                <TouchableOpacity onPress={() => this.onPressOK()} style={styles.primaryBtn}>
+                  <Text style={styles.primaryBtnTxt}>OK</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </Modal>
+        }
+         
       </ScrollView>
     );
   }

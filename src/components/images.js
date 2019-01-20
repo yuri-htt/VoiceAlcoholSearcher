@@ -16,6 +16,7 @@ const logoTxt = require('../../assets/images/logo_txt.png');
 const mike = require('../../assets/images/mike.png');
 const dotsCircle = require('../../assets/images/dotsCircle.png');
 const voiceShape = require('../../assets/images/voiceShape.png');
+const logoHeart = require('../../assets/images/logo_heart.png');
 
 const images = {
   cooktail,
@@ -36,6 +37,7 @@ const images = {
   mike,
   dotsCircle,
   voiceShape,
+  logoHeart,
 };
 
 export default images;

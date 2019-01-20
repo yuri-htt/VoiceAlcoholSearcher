@@ -6,7 +6,7 @@ export default (state = initialState, action) => {
   switch (type) {
     case 'SET_USER':
       return {
-        uid: payload.uid,
+        uid: payload,
       };
     default:
       return state;
