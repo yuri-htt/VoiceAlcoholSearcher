@@ -174,11 +174,6 @@ export default class Home extends Component {
                 data={posts.data}
                 keyExtractor={item => item.key}
                 renderItem={item => <ListCard item={item} {...this.props} />}
-                refreshControl={(
-                  <RefreshControl
-                    onRefresh={this.onRefresh}
-                  />
-                )}
                 ListFooterComponent={() => (loading ? <View style={styles.loading}><ActivityIndicator size="small" /></View> : null)}
                 onEndReachedThreshold={0.1}
                 onEndReached={this.onEndReached}
