@@ -8,12 +8,18 @@ import {
   Keyboard
 } from 'react-native';
 import StarRating from 'react-native-star-rating';
+import { connect } from 'react-redux';
 
 import CategoryIcon from '../../components/categoryIcon';
 import firebase from '../../firebase';
 import styles from './styles';
 
 const { width } = Dimensions.get('window');
+
+@connect(state => ({
+  user: state.user,
+  posts: state.posts,
+}))
 
 export default class Add extends Component {
   constructor(props) {
@@ -38,6 +44,7 @@ export default class Add extends Component {
       starCount,
       text,
     } = this.state;
+
     return (
       <View style={styles.container}>
         <View style={[styles.contents]}>
@@ -103,23 +110,28 @@ export default class Add extends Component {
       starCount,
       text,
     } = this.state;
-    const { navigation } = this.props;
+    const {
+      user,
+      navigation,
+    } = this.props;
 
     Keyboard.dismiss();
 
     const result = await firebase.createPost(categoryId, categoryName, sakeName, starCount, text);
+
     if (result.error) {
       console.log(result.error)
     } else {
-      navigation.dispatch({ type: 'ADD_POST', payload: result });
+
+      // navigation.dispatch({ type: 'ADD_POST', payload: result });
       navigation.navigate('HomeTab');
-      this.setState({
-        categoryId: 0,
-        categoryName: '',
-        sakeName: '',
-        starCount: 0,
-        text: '',
-      });
+
+      const response = await firebase.getPosts(user.uid);
+      if (!response.error) {
+        navigation.dispatch({ type: 'SET_POSTS', payload: response.data });
+      } else {
+        console.log(response.error)
+      }
     }
   }
 

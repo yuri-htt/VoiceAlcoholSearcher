@@ -36,7 +36,6 @@ export default class Home extends Component {
 
     this.state = {
       posts: [],
-      loading: true,
     };
   }
 
@@ -50,7 +49,6 @@ export default class Home extends Component {
     if (uid) {
       navigation.dispatch({ type: 'SET_USER', payload: uid });
       this.getPosts(uid);
-      this.setState({ loading: false })
 
       // マイクの権限確認
       const isGranted = await PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.RECORD_AUDIO);
@@ -79,10 +77,9 @@ export default class Home extends Component {
     }
   }
 
-  getPosts = async (cursor = null) => {
+  getPosts = async (uid, cursor = null) => {
     const { navigation } = this.props;
-
-    const response = await firebase.getPosts(cursor);
+    const response = await firebase.getPosts(uid);
     if (!response.error) {
       this.setState({
         posts: response.data,
@@ -108,9 +105,6 @@ export default class Home extends Component {
   }
 
   render() {
-    const {
-      loading,
-    } = this.state;
     const { 
       posts,
       app,
@@ -169,16 +163,13 @@ export default class Home extends Component {
               </View>
             }
             {posts.data.length > 0 &&
-            <View style={styles.timeLineCards}>
-              <FlatList
-                data={posts.data}
-                keyExtractor={item => item.key}
-                renderItem={item => <ListCard item={item} {...this.props} />}
-                ListFooterComponent={() => (loading ? <View style={styles.loading}><ActivityIndicator size="small" /></View> : null)}
-                onEndReachedThreshold={0.1}
-                onEndReached={this.onEndReached}
-              />
-            </View>
+              <View style={styles.timeLineCards}>
+                <FlatList
+                  data={posts.data}
+                  keyExtractor={item => item.key}
+                  renderItem={item => <ListCard item={item} {...this.props} />}
+                />
+              </View>
             }
             
           </View>

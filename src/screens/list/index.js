@@ -3,8 +3,6 @@ import {
   Text, 
   View, 
   FlatList,
-  RefreshControl,
-  ActivityIndicator,
 } from 'react-native';
 import { connect } from 'react-redux';
 
@@ -25,11 +23,7 @@ export default class List extends Component {
     this.state = {
       categoryName,
       fetching: false,
-      loading: false,
     };
-  }
-  componentDidMount() {
-
   }
 
   render() {
@@ -38,8 +32,6 @@ export default class List extends Component {
     } = this.props;
     const {
       categoryName,
-      loading,
-      fetching,
     } = this.state;
 
     const listByCategory = posts.data.filter(data => {
@@ -61,15 +53,6 @@ export default class List extends Component {
             data={listByCategory}
             keyExtractor={item => item.key}
             renderItem={item => <ListCard item={item} {...this.props} />}
-            refreshControl={(
-              <RefreshControl
-                refreshing={fetching}
-                onRefresh={this.onRefresh}
-              />
-            )}
-            ListFooterComponent={() => (loading ? <View style={styles.loading}><ActivityIndicator size="small" /></View> : null)}
-            onEndReachedThreshold={0.1}
-            onEndReached={this.onEndReached}
           />
         </View>
         }
