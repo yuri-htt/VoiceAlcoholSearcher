@@ -14,7 +14,6 @@ const CardNavigator = createStackNavigator(
       navigationOptions: {  
         headerStyle: {
           backgroundColor: '#FFF',
-          height: 44,
         },
         header: null,
       }, 
@@ -32,7 +31,7 @@ const CardNavigator = createStackNavigator(
       // Detail
       headerStyle: {
         backgroundColor: '#FFF',
-        height: 44,
+        height: 54,
       },
     }),
   },
@@ -46,7 +45,6 @@ const AppNavigator = createStackNavigator(
         header: null,
         headerStyle: {
           backgroundColor: '#FFF',
-          height: 44,
         },
       },
     },
