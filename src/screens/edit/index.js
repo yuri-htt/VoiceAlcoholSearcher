@@ -30,6 +30,8 @@ export default class Edit extends Component {
       categoryId: post.data.categoryId,
       categoryName: post.data.categoryName,
       sakeName: post.data.sakeName,
+      areaName: post.data.areaName,
+      companyName: post.data.companyName,
       starCount: post.data.starCount,
       text: post.data.text,
     };
@@ -39,6 +41,8 @@ export default class Edit extends Component {
     const {
       categoryName,
       sakeName,
+      areaName,
+      companyName,
       starCount,
       text,
     } = this.state;
@@ -46,8 +50,18 @@ export default class Edit extends Component {
       <View style={styles.container}>
         <View style={[{width}, styles.contents]}>
           <View style={styles.sake}>
-              <CategoryIcon categoryName={categoryName} size={50} style={{marginRight: 16}}/>
-            <Text style={styles.name}>{sakeName}</Text>
+            <CategoryIcon categoryName={categoryName} size={50} style={{marginRight: 16}}/>
+            <View>
+              <Text style={styles.name}>{sakeName}</Text>
+              <View style={styles.detail}>
+                {!!areaName &&
+                  <Text style={styles.detailTxt}>{areaName}</Text>
+                }
+                {!!companyName &&
+                  <Text style={styles.detailTxt}>{'  ' + companyName}</Text>
+                }
+              </View>
+              </View>
           </View>
         
           <View style={[styles.row, styles.starContainer]}>

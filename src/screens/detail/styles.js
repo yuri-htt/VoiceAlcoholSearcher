@@ -5,7 +5,6 @@ import styleConstants from '../../styleConstants';
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // alignItems: 'center',
     backgroundColor: '#FFF',
     paddingHorizontal: 32,
   },
@@ -13,10 +12,15 @@ const styles = StyleSheet.create({
     marginVertical: 32,
     flexDirection: 'row',
     alignItems: 'center',
-    // justifyContent: 'center',
   },
   icon: {
     marginRight: 16,
+  },
+  detail: {
+    flexDirection: 'row',
+  },
+  detailTxt: {
+    color: '#A2A2A2',
   },
   name: {
     fontSize: 16,

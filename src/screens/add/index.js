@@ -32,6 +32,8 @@ export default class Add extends Component {
       categoryId: item.categoryId,
       categoryName: item.categoryName,
       sakeName: item.name,
+      areaName: item.areaName,
+      companyName: item.companyName,
       starCount: 0,
       text: '',
     };
@@ -41,6 +43,8 @@ export default class Add extends Component {
     const {
       categoryName,
       sakeName,
+      areaName,
+      companyName,
       starCount,
       text,
     } = this.state;
@@ -49,8 +53,20 @@ export default class Add extends Component {
       <View style={styles.container}>
         <View style={[styles.contents]}>
           <View style={styles.sake}>
-              <CategoryIcon categoryName={categoryName} size={50} style={{marginRight: 16}}/>
-            <Text style={styles.name}>{sakeName}</Text>
+
+            <CategoryIcon categoryName={categoryName} size={50} style={{marginRight: 16}}/>
+
+            <View>
+              <Text style={styles.name}>{sakeName}</Text>
+              <View style={styles.detail}>
+                {!!areaName &&
+                  <Text style={styles.detailTxt}>{areaName}</Text>
+                }
+                {!!companyName &&
+                  <Text style={styles.detailTxt}>{'  ' + companyName}</Text>
+                }
+              </View>
+            </View>
           </View>
         
           <View style={[styles.row, styles.starContainer]}>
@@ -107,6 +123,8 @@ export default class Add extends Component {
       categoryId,
       categoryName,
       sakeName,
+      areaName,
+      companyName,
       starCount,
       text,
     } = this.state;
@@ -117,7 +135,7 @@ export default class Add extends Component {
 
     Keyboard.dismiss();
 
-    const result = await firebase.createPost(categoryId, categoryName, sakeName, starCount, text);
+    const result = await firebase.createPost(categoryId, categoryName, sakeName, areaName, companyName, starCount, text);
 
     if (result.error) {
       console.log(result.error)

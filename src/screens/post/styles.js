@@ -4,11 +4,13 @@ import styleConstants from '../../styleConstants';
 
 
 const styles = StyleSheet.create({
+  flex: {
+    flex: 1,
+  },
   guideTxt: {
     fontSize: 16,
   },
   voiceContainer: {
-    // backgroundColor: 'green',
     marginTop: 32,
   },
   voice: {
@@ -121,6 +123,12 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: '#212121',
     marginBottom: 16,
+  },
+  detail: {
+    flexDirection: 'row',
+  },
+  detailTxt: {
+    color: '#A2A2A2',
   },
 });
 

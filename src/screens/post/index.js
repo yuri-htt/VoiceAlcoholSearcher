@@ -239,8 +239,21 @@ export default class Post extends Component {
     return (
       <TouchableOpacity onPress={() => this.onPressCard(item)} key={`match-list-${index}-View`}>
         <View style={[styles.candidateCard, {width: width - 64}]}>
+
           <CategoryIcon categoryName={item.categoryName} style={{ marginRight: 16 }}/>
-          <Text style={styles.categoryCardTxt}>{item.name}</Text>
+          
+          <View style={styles.flex}>
+            <Text style={styles.categoryCardTxt} numberOfLines={1} ellipsizeMode="tail" >{item.name}</Text>
+            <View style={styles.detail}>
+              {!!item.areaName &&
+                <Text style={styles.detailTxt}>{item.areaName}</Text>
+              }
+              {!!item.companyName &&
+                <Text style={styles.detailTxt}>{'  ' + item.companyName}</Text>
+              }
+            </View>
+          </View>
+
         </View>
       </TouchableOpacity>
     );
@@ -287,7 +300,9 @@ export default class Post extends Component {
             </View>
             }
 
-            <ScrollView>
+            <ScrollView
+            showsVerticalScrollIndicator={false}
+            >
             {!this.state.searching　&& this.state.matchLists.length > 0 && this.state.matchLists.map((result, index) => {
               return (
                 <View key={`partial-result-${index}-View`}>

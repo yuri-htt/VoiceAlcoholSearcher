@@ -21,6 +21,12 @@ const styles = StyleSheet.create({
   name: {
     fontSize: 20,
   },
+  detail: {
+    flexDirection: 'row',
+  },
+  detailTxt: {
+    color: '#A2A2A2',
+  },
   row: {
     flexDirection: 'row',
   },

@@ -115,13 +115,15 @@ class Firebase{
     }
   }
 
-  createPost = async (categoryId = 0, categoryName = '', sakeName = '', starCount = 0, text = '') => {
+  createPost = async (categoryId = 0, categoryName = '', sakeName = '', areaName = '', companyName = '' ,starCount = 0, text = '') => {
     try {
       let newPost;
       const post = {
         categoryId,
         categoryName,
         sakeName,
+        areaName,
+        companyName,
         starCount,
         text,
         timestamp: Date.now(),
