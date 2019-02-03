@@ -3,13 +3,17 @@ import { StyleSheet } from 'react-native';
 import styleConstants from '../../styleConstants';
 
 const styles = StyleSheet.create({
+  flex: {
+    flex: 1,
+  },
   container: {
     flex: 1,
     alignItems: 'center',
     backgroundColor: '#FFF',
+    paddingHorizontal: 16,
   },
   contents: {
-    padding: 16,
+    flex: 1,
     justifyContent: 'center',
   },
   sake: {

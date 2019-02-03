@@ -48,17 +48,20 @@ export default class Edit extends Component {
     } = this.state;
     return (
       <View style={styles.container}>
-        <View style={[{width}, styles.contents]}>
+        <View style={styles.contents}>
           <View style={styles.sake}>
             <CategoryIcon categoryName={categoryName} size={50} style={{marginRight: 16}}/>
-            <View>
-              <Text style={styles.name}>{sakeName}</Text>
+            <View style={styles.flex}>
+              <Text style={styles.name} numberOfLines={1} ellipsizeMode="tail">{sakeName}</Text>
               <View style={styles.detail}>
-                {!!areaName &&
-                  <Text style={styles.detailTxt}>{areaName}</Text>
+                {!!areaName && !companyName &&
+                  <Text style={styles.detailTxt} numberOfLines={1} ellipsizeMode="tail">{areaName}</Text>
                 }
-                {!!companyName &&
-                  <Text style={styles.detailTxt}>{'  ' + companyName}</Text>
+                {!!companyName && !areaName &&
+                  <Text style={styles.detailTxt} numberOfLines={1}ellipsizeMode="tail" >{companyName}</Text>
+                }
+                {!!areaName && !!companyName &&
+                  <Text style={styles.detailTxt} numberOfLines={1} ellipsizeMode="tail">{areaName + '  ' + companyName}</Text>
                 }
               </View>
               </View>
