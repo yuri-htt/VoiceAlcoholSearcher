@@ -3,6 +3,9 @@ import { StyleSheet } from 'react-native';
 import styleConstants from '../../styleConstants';
 
 const styles = StyleSheet.create({
+  flex: {
+    flex: 1,
+  },
   container: {
     flex: 1,
     backgroundColor: '#FFF',

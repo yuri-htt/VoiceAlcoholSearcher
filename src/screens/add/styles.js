@@ -3,6 +3,9 @@ import { StyleSheet } from 'react-native';
 import styleConstants from '../../styleConstants';
 
 const styles = StyleSheet.create({
+  flex: {
+    flex: 1,
+  },
   container: {
     flex: 1,
     alignItems: 'center',
@@ -10,10 +13,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
   },
   contents: {
-    paddingBottom: 16,
+    flex: 1,
     justifyContent: 'center',
   },
   sake: {
+    flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
     marginTop: 32,

@@ -23,14 +23,17 @@ export default class Detail extends Component {
       <View style={styles.container}>
         <View style={styles.header}>
           <CategoryIcon categoryName={post.data.categoryName} size={60} style={styles.icon} />
-          <View>
-            <Text style={styles.name}>{post.data.sakeName}</Text>
+          <View style={styles.flex}>
+            <Text style={styles.name} numberOfLines={2}>{post.data.sakeName}</Text>
             <View style={styles.detail}>
-              {!!post.data.areaName &&
-                <Text style={styles.detailTxt}>{post.data.areaName}</Text>
+              {!!post.data.areaName && !post.data.companyName &&
+                <Text style={styles.detailTxt} numberOfLines={1}>{post.data.areaName}</Text>
               }
-              {!!post.data.companyName &&
-                <Text style={styles.detailTxt}>{'  ' + post.data.companyName}</Text>
+              {!!post.data.companyName && !post.data.areaName &&
+                <Text style={styles.detailTxt} numberOfLines={1}>{post.data.companyName}</Text>
+              }
+              {!!post.data.areaName && !!post.data.companyName &&
+                <Text style={styles.detailTxt} numberOfLines={1}>{post.data.areaName + '  ' + post.data.companyName}</Text>
               }
               </View>
             </View>

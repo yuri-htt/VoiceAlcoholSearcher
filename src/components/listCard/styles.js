@@ -7,9 +7,9 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     borderWidth: 0.2,
     borderColor: '#BDBDBD',
-    shadowOffset: { width: 4, height: 4 },
-    shadowColor: 'black',
-    shadowOpacity: 0.25,
+    // shadowOffset: { width: 4, height: 4 },
+    // shadowColor: 'black',
+    // shadowOpacity: 0.25,
     backgroundColor: '#FFF',
     padding: 16,
     flexDirection: 'row',
@@ -23,6 +23,9 @@ const styles = StyleSheet.create({
   },
   leftColumn: {
     justifyContent: 'center'
+  },
+  rightColumn: {
+flex: 1,
   },
   titleText: {
     color: '#212121',

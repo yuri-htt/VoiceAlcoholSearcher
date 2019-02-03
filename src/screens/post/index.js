@@ -245,11 +245,14 @@ export default class Post extends Component {
           <View style={styles.flex}>
             <Text style={styles.categoryCardTxt} numberOfLines={1} ellipsizeMode="tail" >{item.name}</Text>
             <View style={styles.detail}>
-              {!!item.areaName &&
-                <Text style={styles.detailTxt}>{item.areaName}</Text>
+              {!!item.areaName && !item.companyName && 
+                <Text style={styles.detailTxt} numberOfLines={1}>{item.areaName}</Text>
               }
-              {!!item.companyName &&
-                <Text style={styles.detailTxt}>{'  ' + item.companyName}</Text>
+              {!!item.companyName && !item.areaName && 
+                <Text style={styles.detailTxt} numberOfLines={1}>{item.companyName}</Text>
+              }
+              {!!item.areaName && !!item.companyName && 
+                <Text style={styles.detailTxt} numberOfLines={1}>{item.areaName + '  ' + item.companyName}</Text>
               }
             </View>
           </View>

@@ -33,7 +33,7 @@ export default class CategoryCard extends Component {
 
           <View style={styles.rightColumn}>
             {post.sakeName != '' && (
-              <Text style={styles.titleText}>{post.sakeName}</Text>
+              <Text style={styles.titleText} numberOfLines={1} ellipsizeMode="tail">{post.sakeName}</Text>
             )}
             <Text style={styles.text}>{postedDate}</Text>
             <View style={styles.stars}>

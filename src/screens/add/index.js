@@ -56,14 +56,17 @@ export default class Add extends Component {
 
             <CategoryIcon categoryName={categoryName} size={50} style={{marginRight: 16}}/>
 
-            <View>
-              <Text style={styles.name}>{sakeName}</Text>
+            <View style={styles.flex}>
+              <Text style={styles.name} numberOfLines={2} ellipsizeMode="tail">{sakeName}</Text>
               <View style={styles.detail}>
-                {!!areaName &&
-                  <Text style={styles.detailTxt}>{areaName}</Text>
+                {!!areaName && !companyName && 
+                  <Text style={styles.detailTxt} numberOfLines={1}>{areaName}</Text>
                 }
-                {!!companyName &&
-                  <Text style={styles.detailTxt}>{'  ' + companyName}</Text>
+                {!!companyName && !areaName && 
+                  <Text style={styles.detailTxt} numberOfLines={1}>{companyName}</Text>
+                }
+                {!!areaName && !!companyName && 
+                  <Text style={styles.detailTxt} numberOfLines={1}>{areaName + '  ' + companyName}</Text>
                 }
               </View>
             </View>
