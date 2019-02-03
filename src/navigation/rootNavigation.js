@@ -40,6 +40,9 @@ const mergeProps = (state, dispatch, ownProps) => {
 //   }),
 // )(AppWithNavigationState)
 
+@connect(state => ({
+  nav: state.nav,
+}))
 export default class AppWithNavigationState extends React.Component {
   componentDidMount() {
     BackHandler.addEventListener('hardwareBackPress', this.onBackPress);
@@ -51,11 +54,11 @@ export default class AppWithNavigationState extends React.Component {
 
   onBackPress = () => {
     const { nav, dispatch } = this.props;
-    // if (nav.routes[nav.index].index === 0) {
-    //   return false;
-    // }
+    if (nav.routes[nav.index].index === 0) {
+      return false;
+    }
 
-    // dispatch(NavigationActions.back());
+    dispatch(NavigationActions.back());
 
     return true;
   };
