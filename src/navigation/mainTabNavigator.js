@@ -32,12 +32,12 @@ export default createBottomTabNavigator(
         tabBarIcon: PostTabIcon,
       }),
     },
-    BadgesTab: {
-      screen: createTabStack('BadgesTab', BadgesScreen),
-      navigationOptions: () => ({
-        tabBarIcon: BadgesTabIcon,
-      }),
-    },
+    // BadgesTab: {
+    //   screen: createTabStack('BadgesTab', BadgesScreen),
+    //   navigationOptions: () => ({
+    //     tabBarIcon: BadgesTabIcon,
+    //   }),
+    // },
   },
   {
     tabBarOptions: {
